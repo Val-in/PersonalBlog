@@ -1,0 +1,17 @@
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\bin\Debug\net9.0\PersonalBlog.Infrastructure.deps.json
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\bin\Debug\net9.0\PersonalBlog.Infrastructure.runtimeconfig.json
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\bin\Debug\net9.0\PersonalBlog.Infrastructure.dll
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\bin\Debug\net9.0\PersonalBlog.Infrastructure.pdb
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\bin\Debug\net9.0\PersobalBlog.Core.dll
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\bin\Debug\net9.0\PersobalBlog.Core.pdb
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\obj\Debug\net9.0\PersonalBlog.Infrastructure.csproj.AssemblyReference.cache
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\obj\Debug\net9.0\PersonalBlog.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\obj\Debug\net9.0\PersonalBlog.Infrastructure.AssemblyInfoInputs.cache
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\obj\Debug\net9.0\PersonalBlog.Infrastructure.AssemblyInfo.cs
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\obj\Debug\net9.0\PersonalBlog.Infrastructure.csproj.CoreCompileInputs.cache
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\obj\Debug\net9.0\Personal.82DA5F94.Up2Date
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\obj\Debug\net9.0\PersonalBlog.Infrastructure.dll
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\obj\Debug\net9.0\refint\PersonalBlog.Infrastructure.dll
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\obj\Debug\net9.0\PersonalBlog.Infrastructure.pdb
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\obj\Debug\net9.0\PersonalBlog.Infrastructure.genruntimeconfig.cache
+D:\Desktop\C SHARP\PersonalBlog\PersonalBlog.Infrastructure\obj\Debug\net9.0\ref\PersonalBlog.Infrastructure.dll
