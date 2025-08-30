@@ -2,8 +2,8 @@ using PersonalBlog.Core.Models;
 
 namespace PersobalBlog.Core.Repositories;
 
-public interface IUserRepository 
+public interface IUserRepository //для работы UserRepository в Infrastructure
 {
-    User GetById(int id);
+    User GetById(Guid id);
     void Add(User user);
 }
