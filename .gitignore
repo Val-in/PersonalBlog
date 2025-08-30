@@ -1,0 +1,15 @@
+/PersonalBlog.Web/obj/
+/PersonalBlog.Web/bin/
+
+/PersonalBlog.Infrastructure/bin/
+/PersonalBlog.Infrastructure/obj/
+
+/PersonalBlog.Application/bin/
+/PersonalBlog.Application/obj/
+
+/PersonalBlog.Core/bin/
+/PersonalBlog.Core/obj/
+
+/PersonalBlog/.idea/
+
+
