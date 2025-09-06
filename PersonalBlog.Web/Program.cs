@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PersobalBlog.Core.Repositories;
 using PersonalBlog.Application.Services;
 using PersonalBlog.Infrastructure;
@@ -11,31 +12,30 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        builder.Services.AddControllersWithViews();
-        builder.Services.AddDbContext<AppDbContext>();
-        builder.Services.AddScoped<IUserRepository, UserRepository>(); //Scoped – один экземпляр на запрос (HTTP Request)
+// Add services
+        builder.Services.AddControllers();
+        builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<UserService>();
+        builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+        builder.Services.AddScoped<AppCommentService>();
+        builder.Services.AddScoped<ITagRepository, TagRepository>();
+        builder.Services.AddScoped<TagService>();
+        builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+        builder.Services.AddScoped<ArticleService>();
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-        if (!app.Environment.IsDevelopment())
-        {
-           
-        }
-
-        app.UseHttpsRedirection();
+        //app.UseHttpsRedirection();
         app.UseRouting();
-
+        app.UseAuthentication();
         app.UseAuthorization();
 
-        app.MapStaticAssets();
-        app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-            .WithStaticAssets();
+        app.MapControllers();
 
         app.Run();
+
     }
 }

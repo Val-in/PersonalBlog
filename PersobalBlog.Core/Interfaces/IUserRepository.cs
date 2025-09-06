@@ -6,4 +6,9 @@ public interface IUserRepository //для работы UserRepository в Infrast
 {
     User GetById(Guid id);
     void Add(User user);
+    
+    User GetByLogin(string login);
+    IEnumerable<User> GetAll();
+    void Update(User user);
+    void Delete(User user);
 }

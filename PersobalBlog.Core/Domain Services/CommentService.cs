@@ -4,7 +4,6 @@ namespace PersobalBlog.Core.Domain_Services;
 
 public class CommentService //Domain Service — бизнес-логика, которая затрагивает несколько сущностей.
 {
-    
     private readonly IUserRepository _userRepository;
     private readonly IArticleRepository _articleRepository;
 
