@@ -1,79 +1,77 @@
 using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
-using PersonalBlog.Core.Models;
 
-namespace PersonalBlog.Controllers;
+namespace PersonalBlog.Web.Controllers;
 
-/* [ApiController] Обозначает, что контроллер работает как API (JSON).
-Автоматически проверяет валидность входных данных (ModelState.IsValid) и возвращает 400 BadRequest, если DTO некорректный.
-Позволяет использовать атрибуты [FromBody], [FromQuery] и т.д.*/
+/// <summary>
+/// [ApiController] Обозначает, что контроллер работает как API (JSON).
+/// Автоматически проверяет валидность входных данных (ModelState. IsValid) и возвращает 400 BadRequest, если DTO некорректный.
+/// Позволяет использовать атрибуты [FromBody], [FromQuery] и т.д.
+/// Route Определяет базовый маршрут для всех действий. [controller] заменяется на имя класса без Controller.
+///Пример: UserController → api/user.
+/// </summary>
+/// <param name="logger"></param>
+/// <param name="service"></param>
 [ApiController]
-/* Route Определяет базовый маршрут для всех действий. [controller] заменяется на имя класса без Controller.
-Пример: UserController → api/user.*/
 [Route("api/[controller]")]
-public class UserController : Controller //Контроллеры вызывают Application сервисы, а не DbContext напрямую
-{
-    private readonly ILogger<UserController> _logger; //ГДЕ ИСПОЛЬЗУЕМ???
-    private readonly UserService _service;
-
-    public UserController(ILogger<UserController> logger, UserService service)
-    {
-        _logger = logger;
-        _service = service;
-    }
+public class UserController(ILogger<UserController> logger, UserService service) : Controller 
+{ 
+    /// <summary>
+    /// [FromBody] Обозначает, что данные приходят в теле запроса (JSON).
+    /// Если есть [ApiController], для POST/PUT запросов DTO по умолчанию берётся из тела.
+    /// [FromBody] можно опустить, но многие ставят его для ясности кода.
+    /// </summary>
     [HttpPost("register")]
-    public IActionResult Register([FromBody] UserDto dto) //[FromBody] Обозначает, что данные приходят в теле запроса (JSON).
-                                                            //Если есть [ApiController], для POST/PUT запросов DTO по умолчанию берётся из тела.
-                                                            //→ [FromBody] можно опустить, но многие ставят его для ясности кода.
+    public IActionResult Register([FromBody] UserDto dto, [FromQuery] string? role) 
     {
         try
         {
-            var user = _service.CreateUser(dto);
+            var user = service.CreateUser(dto, role);
             return Ok(new { message = "Пользователь зарегистрирован", userId = user.Id });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ошибка при регистрации пользователя");
+            logger.LogError(ex, "Ошибка при регистрации пользователя");
             return BadRequest(new { message = ex.Message });
         }
     }
     
-    [HttpGet("{id}")]
-    public IActionResult GetById(Guid id) => Ok(new { id, name = "Test" });
-    // {
-    //     var user = _service.GetById(id);
-    //     if (user == null) return NotFound(new { message = "Пользователь не найден" });
-    //     return Ok(user);
-    // }
+    [HttpGet("{id:guid}")]
+    public IActionResult GetById(Guid id)
+    {
+        var user = service.GetById(id);
+        if (user == null) return NotFound(new { message = "Пользователь не найден" });
+        return Ok(user);
+    }
     
     [HttpGet]
     public IActionResult GetAll()
     {
-        var users = _service.GetAll();
+        var users = service.GetAll();
         return Ok(users);
     }
     
-    [HttpPut("{id}")]
+    [HttpPut("{id:guid}")]
     public IActionResult Update(Guid id, [FromBody] UserDto dto)
     {
         try
         {
-            var updated = _service.Update(id, dto.Login, dto.Nickname);
+            var updated = dto is { Login: not null, Nickname: not null } && service.Update(id, dto.Login, dto.Nickname);
             if (!updated) return NotFound(new { message = "Пользователь не найден" });
             return Ok(new { message = "Пользователь обновлён" });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Ошибка при обновлении пользователя");
+            logger.LogError(ex, "Ошибка при обновлении пользователя");
             return BadRequest(new { message = ex.Message });
         }
     }
     
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:guid}")]
     public IActionResult Delete(Guid id)
     {
-        var deleted = _service.Delete(id);
+        var deleted = service.Delete(id);
         if (!deleted) return NotFound(new { message = "Пользователь не найден" });
         return Ok(new { message = "Пользователь удалён" });
     }

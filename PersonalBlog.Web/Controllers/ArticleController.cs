@@ -1,70 +1,59 @@
 using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.Services;
 
-namespace PersonalBlog.Controllers;
+namespace PersonalBlog.Web.Controllers;
 
 [Route("[controller]")]
-public class ArticleController : Controller
+public class ArticleController(ArticleService articleService) : Controller
 {
-    private readonly ArticleService _articleService;
-
-    public ArticleController(ArticleService articleService)
-    {
-        _articleService = articleService;
-    }
-
     // Создание статьи
     [HttpPost("create")]
     public IActionResult Create(Guid authorId, string title, string content)
     {
-        var success = _articleService.AddArticle(authorId, title, content);
+        var success = articleService.AddArticle(authorId, title, content);
         if (!success) return BadRequest("Cannot create article");
 
         return Ok("Article created");
     }
 
-    // Получение статьи по id
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public IActionResult Get(Guid id)
     {
-        var article = _articleService.GetById(id);
+        var article = articleService.GetById(id);
         if (article == null) return NotFound();
 
         return Ok(article);
     }
 
-    // Получение всех статей по автору
-    [HttpGet("by-author/{authorId}")]
+    [HttpGet("by-author/{authorId:guid}")]
     public IActionResult GetByAuthor(Guid authorId)
     {
-        var articles = _articleService.GetByAuthor(authorId);
+        var articles = articleService.GetByAuthor(authorId);
         return Ok(articles);
     }
     
     [HttpGet("{id}")]
     public IActionResult Details(Guid id)
     {
-        var articleDto = _articleService.GetById(id); 
+        var articleDto = articleService.GetById(id); 
         if (articleDto == null) return NotFound();
 
         return Ok(articleDto); // возвращаем JSON
     }
 
-    // Редактирование статьи
-    [HttpPost("edit/{id}")]
+    [HttpPost("edit/{id:guid}")]
     public IActionResult Edit(Guid id, string newTitle, string newContent)
     {
-        var success = _articleService.UpdateArticle(id, newTitle, newContent);
+        var success = articleService.UpdateArticle(id, newTitle, newContent);
         if (!success) return BadRequest("Cannot update article");
 
         return Ok("Article updated");
     }
 
-    // Удаление статьи
-    [HttpPost("delete/{id}")]
+    [HttpPost("delete/{id:guid}")]
     public IActionResult Delete(Guid id)
     {
-        var success = _articleService.DeleteArticle(id);
+        var success = articleService.DeleteArticle(id);
         if (!success) return BadRequest("Cannot delete article");
 
         return Ok("Article deleted");

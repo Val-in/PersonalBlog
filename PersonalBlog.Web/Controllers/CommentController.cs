@@ -1,60 +1,48 @@
 using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.Services;
 
-namespace PersonalBlog.Controllers;
+namespace PersonalBlog.Web.Controllers;
 
-public class CommentController :  Controller
+public class CommentController(AppCommentService commentService) : Controller
 {
-    private readonly AppCommentService _commentService;
-
-    public CommentController(AppCommentService commentService)
-    {
-        _commentService = commentService;
-    }
-
     [HttpPost]
     public IActionResult Create(Guid userId, Guid articleId, string text)
     {
-        var success = _commentService.AddComment(userId, articleId, text);
+        var success = commentService.AddComment(userId, articleId, text);
         if (!success) return BadRequest("Cannot create comment");
 
         return Ok("Comment created");
     }
     
-
-    // Получить комментарий по id
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public IActionResult Get(Guid id)
     {
-        var comment = _commentService.GetById(id);
+        var comment = commentService.GetById(id);
         if (comment == null) return NotFound();
 
         return Ok(comment);
     }
 
-    // Получить все комментарии
     [HttpGet("all")]
     public IActionResult GetAll()
     {
-        var comments = _commentService.GetAll();
+        var comments = commentService.GetAll();
         return Ok(comments);
     }
 
-    // Редактировать комментарий
-    [HttpPost("edit/{id}")]
+    [HttpPost("edit/{id:guid}")]
     public IActionResult Edit(Guid id, string newText)
     {
-        var success = _commentService.UpdateComment(id, newText);
+        var success = commentService.UpdateComment(id, newText);
         if (!success) return BadRequest("Cannot update comment");
 
         return Ok("Comment updated");
     }
 
-    // Удалить комментарий
-    [HttpPost("delete/{id}")]
+    [HttpPost("delete/{id:guid}")]
     public IActionResult Delete(Guid id)
     {
-        var success = _commentService.DeleteComment(id);
+        var success = commentService.DeleteComment(id);
         if (!success) return BadRequest("Cannot delete comment");
 
         return Ok("Comment deleted");

@@ -1,61 +1,49 @@
 using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.Services;
 
-namespace PersonalBlog.Controllers;
+namespace PersonalBlog.Web.Controllers;
 
 [Route("[controller]")]
-public class TagController : Controller
+public class TagController(TagService tagService) : Controller
 {
-    private readonly TagService _tagService;
-
-    public TagController(TagService tagService)
-    {
-        _tagService = tagService;
-    }
-
-    // Создание тега (глобального или личного)
     [HttpPost("create")]
     public IActionResult Create(Guid userId, string name, bool isPersonal = false)
     {
-        var success = _tagService.AddTag(userId, name, isPersonal);
+        var success = tagService.AddTag(userId, name, isPersonal);
         if (!success) return BadRequest("Cannot create tag");
 
         return Ok("Tag created");
     }
 
-    // Получение тега по id
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public IActionResult Get(Guid id)
     {
-        var tag = _tagService.GetById(id);
+        var tag = tagService.GetById(id);
         if (tag == null) return NotFound();
 
         return Ok(tag);
     }
 
-    // Получение всех тегов
     [HttpGet("all")]
     public IActionResult GetAll()
     {
-        var tags = _tagService.GetAll();
+        var tags = tagService.GetAll();
         return Ok(tags);
     }
 
-    // Редактирование тега
-    [HttpPost("edit/{id}")]
+    [HttpPost("edit/{id:guid}")]
     public IActionResult Edit(Guid id, Guid userId, string newName)
     {
-        var success = _tagService.UpdateTag(id, userId, newName);
+        var success = tagService.UpdateTag(id, userId, newName);
         if (!success) return BadRequest("Cannot update tag");
 
         return Ok("Tag updated");
     }
 
-    // Удаление тега (только если он принадлежит пользователю)
-    [HttpPost("delete/{id}")]
+    [HttpPost("delete/{id:guid}")]
     public IActionResult Delete(Guid id, Guid userId)
     {
-        var success = _tagService.DeleteTag(id, userId);
+        var success = tagService.DeleteTag(id, userId);
         if (!success) return BadRequest("Cannot delete tag");
 
         return Ok("Tag deleted");

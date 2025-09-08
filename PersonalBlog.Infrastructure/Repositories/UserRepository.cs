@@ -1,32 +1,32 @@
-using PersobalBlog.Core.Repositories;
+using PersonalBlog.Core.Interfaces;
 using PersonalBlog.Core.Models;
 
 
 namespace PersonalBlog.Infrastructure.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository(AppDbContext context) : IUserRepository
 {
-    private readonly AppDbContext _context;
-    public UserRepository(AppDbContext context) => _context = context;
-
-    public User GetById(Guid id) => _context.Users.Find(id); //возвращаем Core User, потом он будет передан в DTO, который содержит только данные, нужные Web/UI
+    /// <summary>
+    /// Возвращаем Core User, потом он будет передан в DTO, который содержит только данные, нужные Web/UI
+    /// </summary>
+    public User GetById(Guid id) => context.Users.Find(id) ?? throw new InvalidOperationException();
     public void Add(User user) {
-        _context.Users.Add(user);
-        _context.SaveChanges();
+        context.Users.Add(user);
+        context.SaveChanges();
     }
     
-    public User? GetByLogin(string login) => _context.Users.FirstOrDefault(u => u.UserLogin == login);
+    public User GetByLogin(string login) => context.Users.FirstOrDefault(u => u.UserLogin == login)!;
     
-    public IEnumerable<User> GetAll() => _context.Users.ToList();
+    public IEnumerable<User> GetAll() => context.Users.ToList();
     public void Update(User user)
     {
-        _context.Users.Update(user);
-        _context.SaveChanges();
+        context.Users.Update(user);
+        context.SaveChanges();
     }
 
     public void Delete(User user)
     {
-        _context.Users.Remove(user);
-        _context.SaveChanges();
+        context.Users.Remove(user);
+        context.SaveChanges();
     }
 }

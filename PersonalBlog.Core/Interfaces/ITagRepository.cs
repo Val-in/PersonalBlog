@@ -1,6 +1,6 @@
 using PersonalBlog.Core.Models;
 
-namespace PersobalBlog.Core.Repositories;
+namespace PersonalBlog.Core.Interfaces;
 
 public interface ITagRepository
 {
