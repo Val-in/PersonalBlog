@@ -29,6 +29,7 @@ public static class Program
         builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
         builder.Services.AddScoped<ArticleService>();
         builder.Services.AddScoped<CommentService>();
+        builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
         var app = builder.Build();
 
