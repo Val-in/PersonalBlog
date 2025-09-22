@@ -48,7 +48,18 @@ public class
         return user.Password == dto.Password ? user : null;
     }
 
-    public User? GetById(Guid id) => repo.GetById(id);
+    public UserResponseDto? GetById(Guid id) //возвращаем дто для контроллера
+    {
+        var user = repo.GetById(id);
+
+        return new UserResponseDto
+        {
+            Id = user.Id,
+            Login = user.UserLogin,
+            Nickname = user.UserNickName,
+            Roles = user.UserRoles.Select(ur => ur.Role.RoleName).ToList()
+        };
+    }
 
     public IEnumerable<User> GetAll() => repo.GetAll();
 
