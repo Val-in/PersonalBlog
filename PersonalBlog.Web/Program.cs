@@ -13,12 +13,12 @@ public static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllers();
-        var dbPath = "D:/Desktop/SHARP/PersonalBlog/blog.db";
+        builder.Services.AddControllersWithViews();
+        
+        var dbPath = builder.Configuration.GetConnectionString("DefaultConnection");
         Console.WriteLine("EF Core будет использовать SQLite файл: " + Path.GetFullPath(dbPath));
-
         builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlite(dbPath));
+            options.UseSqlite($"Data Source={dbPath}"));
 
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<UserService>();
@@ -30,6 +30,8 @@ public static class Program
         builder.Services.AddScoped<ArticleService>();
         builder.Services.AddScoped<CommentService>();
         builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
 
@@ -37,8 +39,17 @@ public static class Program
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseDeveloperExceptionPage();
+        
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
 
-        app.MapControllers();
+        app.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}");
 
         app.Run();
 
