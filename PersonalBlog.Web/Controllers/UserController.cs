@@ -23,12 +23,17 @@ public class UserController(ILogger<UserController> logger, UserService service)
     /// [FromBody] можно опустить, но многие ставят его для ясности кода.
     /// </summary>
     [HttpPost("register")]
-    public IActionResult Register([FromBody] UserDto dto, [FromQuery] string? role) 
+    public ActionResult<UserResponseDto> Register([FromBody] UserDto dto, [FromQuery] string? role) 
     {
         try
         {
             var user = service.CreateUser(dto, role);
-            return Ok(new { message = "Пользователь зарегистрирован", userId = user.Id });
+            var response = new UserResponseDto
+            {
+                Message = "Пользователь зарегистрирован",
+                Id = user.Id
+            };
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -38,7 +43,8 @@ public class UserController(ILogger<UserController> logger, UserService service)
     }
     
     [HttpGet("{id:guid}")]
-    public IActionResult GetById(Guid id)
+    [ProducesResponseType(typeof(UserResponseDto), StatusCodes.Status200OK)] //нужно для Swagger
+    public ActionResult<UserResponseDto> GetById(Guid id)
     {
         var user = service.GetById(id);
         if (user == null) return NotFound(new { message = "Пользователь не найден" });
@@ -53,7 +59,7 @@ public class UserController(ILogger<UserController> logger, UserService service)
     }
     
     [HttpPut("{id:guid}")]
-    public IActionResult Update(Guid id, [FromBody] UserDto dto)
+    public ActionResult<UserResponseDto> Update(Guid id, [FromBody] UserDto dto)
     {
         try
         {
