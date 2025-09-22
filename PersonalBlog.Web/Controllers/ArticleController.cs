@@ -32,7 +32,7 @@ public class ArticleController(ArticleService articleService) : Controller
         return Ok(articles);
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("Article/details/{id}")]
     public IActionResult Details(Guid id)
     {
         var articleDto = articleService.GetById(id); 
