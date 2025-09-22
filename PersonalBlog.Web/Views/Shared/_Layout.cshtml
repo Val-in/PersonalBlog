@@ -1,0 +1,57 @@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"] - PersonalBlog</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/main.css" />
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">PersonalBlog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="#">Комментарии</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Теги</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Пользователи</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Роли</a></li>
+            </ul>
+            <form class="form-inline">
+                <button class="btn btn-outline-light" type="button">Выход</button>
+            </form>
+        </div>
+    </nav>
+</header>
+
+<!-- MAIN CONTENT -->
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Статьи</h1>
+        <a class="btn btn-primary" href="#">Добавить статью</a>
+    </div>
+    
+    @RenderBody() <!-- Здесь будут выводиться статьи -->
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-dark text-light mt-5 p-4 text-center">
+    <p>&copy; @DateTime.Now.Year PersonalBlog. Все права защищены.</p>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+</body>
+</html>
