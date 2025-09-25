@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Регистрация";
+    Layout = "_Layout";
+}
+
+<h2>Регистрация</h2>
+<input type="text" id="firstName" placeholder="Имя" class="form-control mb-2"/>
+<input type="text" id="lastName" placeholder="Фамилия" class="form-control mb-2"/>
+<input type="text" id="email" placeholder="Email" class="form-control mb-2"/>
+<input type="password" id="password" placeholder="Пароль" class="form-control mb-2"/>
+<button class="btn btn-primary" onclick="doRegister()">Зарегистрироваться</button>
+
+<script>
+async function doRegister(){
+    let dto = {
+        Nickname: document.getElementById("firstName").value,
+        Login: document.getElementById("email").value,
+        Password: document.getElementById("password").value
+    };
+    let res = await fetch("/api/user/register", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(dto)
+    });
+    if(res.ok){
+        alert("Пользователь создан");
+        window.location.href = "/AccountView/Login";
+    } else {
+        alert("Ошибка регистрации");
+    }
+}
+</script>

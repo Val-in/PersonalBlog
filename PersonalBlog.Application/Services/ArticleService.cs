@@ -1,3 +1,4 @@
+using PersonalBlog.Application.DTO;
 using PersonalBlog.Core.Interfaces;
 using PersonalBlog.Core.Models;
 
@@ -8,25 +9,40 @@ public class ArticleService(IArticleRepository repo)
     /// <summary>
     /// AddArticle не маппит DTO в Entity, а просто создаёт Entity из параметров метода.
     /// </summary>
-    public bool AddArticle(Guid authorId, string title, string content)
+    public bool AddArticle(ArticleDto dto)
     {
-        if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(content))
+        if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
             return false;
 
         var article = new Article
         {
-            AuthorId = authorId,
-            Title = title,
-            Content = content
+            AuthorId = dto.AuthorId,
+            Title = dto.Title,
+            Content = dto.Content
         };
 
         repo.Add(article);
         return true;
     }
 
-    public Article? GetById(Guid id)
+    public ArticleDto? GetById(Guid id) //Сервис не должен возвращать Article?, а должен возвращать ArticleDto?
     {
-        return repo.GetById(id);
+        var article = repo.GetById(id);
+        if (article == null) return null;
+
+        return new ArticleDto
+        {
+            Id = article.ArticleId,
+            Title = article.Title,
+            Content = article.Content,
+            AuthorId = article.AuthorId,
+            Tags = article.ArticleTags.Select(t => new TagDto
+            {
+                TagId = t.TagId,
+                TagName = t.Tag.TagName
+            }).ToList()
+            
+        };
     }
 
     public IEnumerable<Article> GetByAuthor(Guid authorId)

@@ -1,0 +1,25 @@
+@{
+    ViewData["Title"] = "Редактировать роль";
+    Layout = "_Layout";
+}
+
+<h2>Редактировать роль</h2>
+
+<input type="text" id="roleName" class="form-control mb-2" placeholder="Название роли" />
+<input type="text" id="roleDesc" class="form-control mb-2" placeholder="Описание" />
+
+<button class="btn btn-primary" onclick="saveRole()">Сохранить</button>
+<a href="/RoleView/RoleList">Все роли</a>
+
+<script>
+async function saveRole() {
+    const dto = { roleName: document.getElementById("roleName").value, description: document.getElementById("roleDesc").value };
+    await fetch("/api/role/edit/" + ROLE_ID, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dto)
+    });
+    alert("Роль обновлена");
+    window.location.href = "/RoleView/Index";
+}
+</script>

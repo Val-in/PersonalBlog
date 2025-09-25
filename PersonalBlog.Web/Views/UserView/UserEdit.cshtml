@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Редактировать пользователя";
+    Layout = "_Layout";
+}
+
+<h2>Редактировать пользователя</h2>
+
+@* @if (@User.IsInRole("Admin")) { *@
+    <select id="roleSelect" class="form-control mb-2"></select>
+@* } *@
+
+<input type="text" id="nickname" placeholder="Имя" class="form-control mb-2" />
+<input type="text" id="login" placeholder="Email" class="form-control mb-2" />
+<input type="password" id="password" placeholder="Пароль" class="form-control mb-2" />
+
+<button class="btn btn-primary" onclick="saveUser()">Сохранить</button>
+
+<script>
+async function loadRoles() {
+    const res = await fetch("/api/role/all");
+    const roles = await res.json();
+    const select = document.getElementById("roleSelect");
+    roles.forEach(r => {
+        const opt = document.createElement("option");
+        opt.value = r.id;
+        opt.text = r.roleName;
+        select.add(opt);
+    });
+}
+async function saveUser() {
+    const dto = {
+        login: document.getElementById("login").value,
+        nickname: document.getElementById("nickname").value,
+        password: document.getElementById("password").value,
+        roleId: document.getElementById("roleSelect") ? document.getElementById("roleSelect").value : null
+    };
+    await fetch("/api/user/update/" + USER_ID, {  // USER_ID должен быть задан через Razor или query string
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dto)
+    });
+    alert("Пользователь обновлен");
+    window.location.href = "/UserView/Index";
+}
+loadRoles();
+</script>

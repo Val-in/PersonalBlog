@@ -1,5 +1,5 @@
 @{
-    Layout = null;
+    ViewData["Title"] = "PersonalBlog";
 }
 
 <!DOCTYPE html>
@@ -16,32 +16,32 @@
 <!-- HEADER -->
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">PersonalBlog</a>
+        <a class="navbar-brand" href="/">PersonalBlog</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="#">Комментарии</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Теги</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Пользователи</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Роли</a></li>
-            </ul>
-            <form class="form-inline">
-                <button class="btn btn-outline-light" type="button">Выход</button>
-            </form>
-        </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" asp-controller="UserView" asp-action="Index">Пользователи</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="RoleView" asp-action="Index">Роли</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="ArticleView" asp-action="Index">Статьи</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="CommentView" asp-action="Index">Комментарии</a></li>
+                </ul>
+                <button id="logoutBtn" class="btn btn-outline-light">Выход</button>
+            </div>
+        }
+        else
+        {
+            <a class="btn btn-outline-light" href="/AccountView/Login">Вход</a>
+        }
     </nav>
 </header>
 
 <!-- MAIN CONTENT -->
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1>Статьи</h1>
-        <a class="btn btn-primary" href="#">Добавить статью</a>
-    </div>
-    
-    @RenderBody() <!-- Здесь будут выводиться статьи -->
+    @RenderBody() <!-- Здесь будут выводиться Views -->
 </div>
 
 <!-- FOOTER -->
@@ -49,9 +49,24 @@
     <p>&copy; @DateTime.Now.Year PersonalBlog. Все права защищены.</p>
 </footer>
 
+@Html.AntiForgeryToken()
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+<script>
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+    await fetch('/AccountApi/logout', {
+        method: 'POST',
+        headers: {
+            'RequestVerificationToken': token
+        }
+    });
+
+    window.location.href = '/';
+});
+</script>
 </body>
 </html>

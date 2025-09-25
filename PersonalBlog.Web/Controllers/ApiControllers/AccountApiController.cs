@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
@@ -9,8 +8,8 @@ using PersonalBlog.Application.Services;
 namespace PersonalBlog.Web.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class AccountController(UserService userService) : Controller
+[Route("[controller]")]
+public class AccountApiController(UserService userService) : Controller
 {
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] UserDto dto)
@@ -52,10 +51,10 @@ public class AccountController(UserService userService) : Controller
      /// Logout доступно только администратору
      /// </summary>
      [HttpPost("logout")] 
-     [Authorize(Roles = "Admin")] 
+     [ValidateAntiForgeryToken]
      public async Task<IActionResult> Logout()
      {
          await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-         return Ok(new { message = "Выход выполнен" });
+         return RedirectToAction("Index", "Home");
      }
 }

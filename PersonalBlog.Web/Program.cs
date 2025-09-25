@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using PersonalBlog.Application.Services;
 using PersonalBlog.Core.DomainServices;
@@ -32,6 +33,15 @@ public static class Program
         builder.Services.AddScoped<IRoleRepository, RoleRepository>();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/AccountView/Login"; // путь к форме входа
+                options.AccessDeniedPath = "/ErrorView/Forbidden"; // путь при отказе
+            });
+
+        builder.Services.AddAuthorization();
 
         var app = builder.Build();
 

@@ -1,0 +1,31 @@
+@{
+    ViewData["Title"] = "Пользователь";
+    Layout = "_Layout";
+}
+
+<h2 id="userNickname"></h2>
+<p>Email: <span id="userLogin"></span></p>
+<p>Роли: <span id="userRoles"></span></p>
+
+<a class="btn btn-primary" id="editBtn">Редактировать</a>
+<a class="btn btn-secondary" asp-controller="UserView" asp-action="Index">Назад</a>
+
+<script>
+async function loadUser() {
+    const res = await fetch("/api/user/" + USER_ID); // USER_ID передается через Razor или JS
+    const u = await res.json();
+
+    document.getElementById("userNickname").innerText = u.nickname;
+    document.getElementById("userLogin").innerText = u.login;
+    document.getElementById("userRoles").innerHTML = u.roles.map(r => `<span class="badge badge-info mr-1">${r}</span>`).join("");
+
+    // Только для админа показываем кнопку редактирования роли
+    if(USER_IS_ADMIN){
+        document.getElementById("editBtn").href = "/UserView/Edit/" + USER_ID;
+    } else {
+        document.getElementById("editBtn").style.display = "none";
+    }
+}
+
+loadUser();
+</script>

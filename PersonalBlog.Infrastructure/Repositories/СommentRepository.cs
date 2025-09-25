@@ -13,8 +13,12 @@ public class CommentRepository(AppDbContext context) : ICommentRepository
     }
 
     public Comment? GetById(Guid id) => context.Comments.Find(id);
-
-    public IEnumerable<Comment> GetAll() => context.Comments.ToList();
+    
+    // В репозитории
+    public IEnumerable<Comment> GetByArticleId(Guid articleId)
+    {
+        return context.Comments.Where(c => c.ArticleId == articleId).ToList();
+    }
 
     public void Update(Comment comment)
     {

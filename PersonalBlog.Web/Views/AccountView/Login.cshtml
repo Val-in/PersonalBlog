@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Вход";
+    Layout = "_Layout";
+}
+
+<h2>Вход</h2>
+
+<div class="col-md-4">
+    <input type="text" id="login" placeholder="Логин" class="form-control mb-2" />
+    <input type="password" id="password" placeholder="Пароль" class="form-control mb-2" />
+    <button class="btn btn-primary" onclick="doLogin()">Войти</button>
+    <p>Нет аккаунта? <a href="/UserView/Register">Зарегистрироваться</a></p>
+</div>
+
+<script>
+async function doLogin() {
+    let dto = { login: document.getElementById("login").value, password: document.getElementById("password").value };
+    let res = await fetch("/accountapi/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dto)
+    });
+    if (res.ok) {
+        // после успешного входа редиректим
+        window.location.href = "/ArticleView/ArticleList";
+    } else {
+        alert("Неверный логин или пароль");
+    }
+}
+</script>

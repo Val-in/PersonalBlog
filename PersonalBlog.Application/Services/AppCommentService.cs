@@ -1,3 +1,4 @@
+using PersonalBlog.Application.DTO;
 using PersonalBlog.Core.DomainServices;
 using PersonalBlog.Core.Interfaces;
 using PersonalBlog.Core.Models;
@@ -20,16 +21,19 @@ public class AppCommentService(CommentService commentService, ICommentRepository
         return true;
     }
 
-    public Comment? GetById(Guid id)
+    public IEnumerable<CommentDto> GetByArticleId(Guid articleId)
     {
-        return commentRepository.GetById(id);
+        return commentRepository.GetByArticleId(articleId)
+            .Select(c => new CommentDto
+            {
+                Id = c.CommentId,
+                Text = c.CommentText,
+                UserId = c.UserId,
+                ArticleId = c.ArticleId
+            })
+            .ToList();
     }
-
-    public IEnumerable<Comment> GetAll()
-    {
-        return commentRepository.GetAll();
-    }
-
+    
     public bool UpdateComment(Guid id, string newText)
     {
         var comment = commentRepository.GetById(id);
@@ -47,5 +51,19 @@ public class AppCommentService(CommentService commentService, ICommentRepository
 
         commentRepository.Delete(comment);
         return true;
+    }
+
+    public CommentDto? GetById(Guid id)
+    {
+        var comment = commentRepository.GetById(id);
+        if (comment == null) return null;
+
+        return new CommentDto
+        {
+            Id = comment.CommentId,
+            Text = comment.CommentText,
+            UserId = comment.UserId,
+            ArticleId = comment.ArticleId
+        };
     }
 }

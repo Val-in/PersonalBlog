@@ -1,0 +1,24 @@
+@{
+    ViewData["Title"] = "Добавить тег";
+    Layout = "_Layout";
+}
+
+<h2>Добавить тег</h2>
+<input type="text" id="tagName" class="form-control mb-2" placeholder="Название"/>
+<button class="btn btn-primary" onclick="createTag()">Создать</button>
+<a href="/TagView/Index">Перейти к списку всех тегов</a>
+
+<script>
+async function createTag(){
+    let dto = {
+        TagName: document.getElementById("tagName").value,
+        IsPersonal: true
+    };
+    await fetch("/tagapi/create", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(dto)
+    });
+    window.location.href = "/TagView/TagList"; // редирект на список всех тегов
+}
+</script>

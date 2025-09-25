@@ -107,6 +107,9 @@ namespace PersonalBlog.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool?>("IsPersonal")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("TagName")
                         .HasColumnType("TEXT");
 

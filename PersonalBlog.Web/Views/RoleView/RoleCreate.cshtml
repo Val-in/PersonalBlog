@@ -1,0 +1,35 @@
+@{
+    ViewData["Title"] = "Добавление роли";
+    Layout = "_Layout";
+}
+
+@* @if (User.IsInRole("Администратор")) *@
+@* { *@
+    <h2>Добавить роль</h2>
+
+    <input type="text" id="roleName" placeholder="Название роли" class="form-control mb-2"/>
+    <input type="text" id="roleDesc" placeholder="Описание роли" class="form-control mb-2"/>
+
+    <button class="btn btn-primary" onclick="createRole()">Сохранить</button>
+    <a href="/RoleView/RoleList">Перейти к списку всех ролей</a>
+@* } *@
+@* else *@
+@* { *@
+@*     <script> *@
+@*         window.location.href = "/ErrorView/Forbidden"; *@
+@*     </script> *@
+@* } *@
+
+
+<script>
+async function createRole() {
+    const dto = { roleName: document.getElementById("roleName").value, description: document.getElementById("roleDesc").value };
+    await fetch("/api/role/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dto)
+    });
+    alert("Роль добавлена");
+    window.location.href = "/RoleView/RoleList"; // редирект на список ролей
+}
+</script>

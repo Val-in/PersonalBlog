@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "v9hU2Hr+zH0=",
+  "success": true,
+  "projectFilePath": "D:\\Desktop\\SHARP\\PersonalBlog\\PersonalBlog.Api\\PersonalBlog.Api.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Valeriia\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.7\\microsoft.aspnetcore.openapi.9.0.7.nupkg.sha512",
+    "C:\\Users\\Valeriia\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}

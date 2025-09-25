@@ -1,3 +1,4 @@
+using PersonalBlog.Application.DTO;
 using PersonalBlog.Core.Interfaces;
 using PersonalBlog.Core.Models;
 
@@ -5,14 +6,14 @@ namespace PersonalBlog.Application.Services;
 
 public class TagService(ITagRepository tagRepository)
 {
-    public bool AddTag(Guid userId, string name, bool isPersonal)
+    public bool AddTag(TagDto dto)
     {
-        if (string.IsNullOrWhiteSpace(name)) return false;
+        if (string.IsNullOrWhiteSpace(dto.TagName)) return false;
 
         var tag = new Tag
         {
-            TagName = name,
-            UserId = isPersonal ? userId : null, 
+            TagName = dto.TagName,
+            IsPersonal = dto.IsPersonal ?? false,
             CreatedAt = DateTime.UtcNow
         };
 
@@ -24,9 +25,11 @@ public class TagService(ITagRepository tagRepository)
         return tagRepository.GetById(id);
     }
 
-    public IEnumerable<Tag> GetAll()
+    public IEnumerable<TagDto> GetAll()
     {
-        return tagRepository.GetAll();
+        return tagRepository.GetAll()
+            .Select(t => new TagDto { TagId = t.TagId, TagName = t.TagName })
+            .ToList();
     }
 
     /// <summary>

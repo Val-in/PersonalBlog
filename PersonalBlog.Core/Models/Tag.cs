@@ -10,4 +10,5 @@ public class Tag
 
     public User? User { get; set; }
     public ICollection<ArticleTag> ArticleTags { get; set; } = new List<ArticleTag>();
+    public bool? IsPersonal { get; set; }
 }

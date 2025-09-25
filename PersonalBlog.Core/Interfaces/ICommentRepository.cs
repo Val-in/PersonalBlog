@@ -6,7 +6,7 @@ public interface ICommentRepository
 {
     void AddComment(Comment comment);
     Comment? GetById(Guid id);
-    IEnumerable<Comment> GetAll();
     void Update(Comment comment);
     void Delete(Comment comment);
+    public IEnumerable<Comment> GetByArticleId(Guid articleId);
 }

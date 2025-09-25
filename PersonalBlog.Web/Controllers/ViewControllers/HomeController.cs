@@ -6,6 +6,6 @@ public class HomeController : Controller
 {
     public IActionResult Index()
     {
-        return View(); // ищет Views/Home/Index.cshtml
+        return View(); // ищет Views/Home/Register.cshtml
     }
 }

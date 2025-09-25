@@ -1,0 +1,40 @@
+@{
+    ViewData["Title"] = "Добавить статью";
+    Layout = "_Layout";
+}
+
+<h2>Добавить статью</h2>
+
+<select id="tagSelect" class="form-control mb-2" multiple> <!-- Теги будут загружены через loadTags --></select>
+<input type="text" id="titleInput" placeholder="Заголовок" class="form-control mb-2" />
+<textarea id="contentInput" placeholder="Контент" class="form-control mb-2"></textarea>
+
+<button class="btn btn-primary" onclick="createArticle()">Сохранить</button>
+<a href="/ArticleView/ArticleList">Все статьи</a>
+
+<script>
+async function loadTags() {
+    const res = await fetch("/tagapi/all");
+    const tags = await res.json();
+    const select = document.getElementById("tagSelect");
+    tags.forEach(t => {
+        const opt = document.createElement("option");
+        opt.text = t.tagName;
+        select.add(opt, null);
+    });
+}
+async function createArticle() {
+    const title = document.getElementById("titleInput").value;
+    const content = document.getElementById("contentInput").value;
+    const selectedTags = Array.from(document.getElementById("tagSelect").selectedOptions).map(o => o.value);
+
+    await fetch("/articleapi/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, content, tags: selectedTags })
+    });
+    alert("Статья добавлена");
+    window.location.href = "/ArticleView/ArticleDetails";
+}
+loadTags();
+</script>

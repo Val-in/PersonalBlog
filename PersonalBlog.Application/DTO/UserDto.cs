@@ -4,7 +4,6 @@ namespace PersonalBlog.Application.DTO;
 
 public class UserDto
 {
-    [Required]
     public string? Nickname { get; set; }
     [Required]
     public string? Login { get; set; }

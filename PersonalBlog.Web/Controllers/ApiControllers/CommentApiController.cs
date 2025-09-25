@@ -1,14 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
+using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
 
 namespace PersonalBlog.Web.Controllers;
 
-public class CommentController(AppCommentService commentService) : Controller
+[ApiController]
+[Route("[controller]")]
+public class CommentApiController(AppCommentService commentService) : Controller
 {
     [HttpPost]
-    public IActionResult Create(Guid userId, Guid articleId, string text)
+    public IActionResult Create([FromBody] CommentDto dto)
     {
-        var success = commentService.AddComment(userId, articleId, text);
+        var success = commentService.AddComment(dto.UserId, dto.ArticleId, dto.Text);
         if (!success) return BadRequest("Cannot create comment");
 
         return Ok("Comment created");
@@ -22,11 +25,11 @@ public class CommentController(AppCommentService commentService) : Controller
 
         return Ok(comment);
     }
-
-    [HttpGet("all")]
-    public IActionResult GetAll()
+    
+    [HttpGet("byarticle/{articleId}")]
+    public IActionResult GetByArticle(Guid articleId)
     {
-        var comments = commentService.GetAll();
+        var comments = commentService.GetByArticleId(articleId);
         return Ok(comments);
     }
 

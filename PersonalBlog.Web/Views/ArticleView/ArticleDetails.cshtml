@@ -1,0 +1,48 @@
+@{
+    ViewData["Title"] = "Статья";
+    Layout = "_Layout";
+}
+
+<h2 id="articleTitle"></h2>
+<p>Автор: <span id="articleAuthor"></span></p>
+<p id="articleContent"></p>
+<div id="articleTags"></div>
+
+<hr>
+<h5>Комментарии</h5>
+<ul id="commentsList" class="list-group mb-2"></ul>
+
+<textarea id="commentInput" class="form-control mb-2" placeholder="Оставьте комментарий"></textarea>
+<button class="btn btn-primary" onclick="addComment()">Отправить</button>
+
+<script>
+async function loadArticle() {
+    const res = await fetch("/articleapi/details/{id}");
+    const a = await res.json();
+    document.getElementById("articleTitle").innerText = a.title;
+    document.getElementById("articleAuthor").innerText = a.id;
+    document.getElementById("articleContent").innerText = a.content;
+
+    const tagsDiv = document.getElementById("articleTags");
+    tagsDiv.innerHTML = "Теги: " + (a.tags?.map(t => `<span class="badge badge-info mr-1">${t.tagName}</span>`).join("") ?? "");
+    
+    const commentsRes = await fetch("/commentapi/{id:guid}/");
+    const comments = await commentsRes.json();
+    const commentsList = document.getElementById("commentsList");
+    commentsList.innerHTML = "";
+    comments.forEach(c => {
+        commentsList.innerHTML += `<li class="list-group-item">${c.text}</li>`;
+    });
+}
+async function addComment() {
+    const text = document.getElementById("commentInput").value;
+    await fetch("/commentapi/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ articleId: ARTICLE_ID, text, userId: USER_ID })
+    });
+    document.getElementById("commentInput").value = "";
+    loadArticle();
+}
+loadArticle();
+</script>

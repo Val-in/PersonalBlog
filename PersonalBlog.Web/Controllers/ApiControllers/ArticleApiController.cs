@@ -1,16 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
+using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
 
 namespace PersonalBlog.Web.Controllers;
 
+[ApiController]
 [Route("[controller]")]
-public class ArticleController(ArticleService articleService) : Controller
+public class ArticleApiController(ArticleService articleService) : Controller
 {
     // Создание статьи
     [HttpPost("create")]
-    public IActionResult Create(Guid authorId, string title, string content)
+    public IActionResult Create([FromBody] ArticleDto dto)
     {
-        var success = articleService.AddArticle(authorId, title, content);
+        var success = articleService.AddArticle(dto);
         if (!success) return BadRequest("Cannot create article");
 
         return Ok("Article created");
@@ -32,7 +34,7 @@ public class ArticleController(ArticleService articleService) : Controller
         return Ok(articles);
     }
     
-    [HttpGet("Article/details/{id}")]
+    [HttpGet("details/{id}")]
     public IActionResult Details(Guid id)
     {
         var articleDto = articleService.GetById(id); 

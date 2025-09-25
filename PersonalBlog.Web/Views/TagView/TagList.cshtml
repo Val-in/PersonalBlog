@@ -1,0 +1,24 @@
+@{
+    ViewData["Title"] = "Теги";
+    Layout = "_Layout";
+}
+
+<h2>Все теги</h2>
+
+<ul id="tagList" class="list-group"></ul>
+
+<script>
+async function loadTags() {
+    const res = await fetch("/api/tag/all");
+    const tags = await res.json();
+    const list = document.getElementById("tagList");
+    list.innerHTML = "";
+    tags.forEach(t => {
+        list.innerHTML += `<li class="list-group-item">
+            ${t.tagName} 
+            <a class="btn btn-sm btn-primary float-right" href="/TagView/Edit/${t.id}">Редактировать</a>
+        </li>`;
+    });
+}
+loadTags();
+</script>

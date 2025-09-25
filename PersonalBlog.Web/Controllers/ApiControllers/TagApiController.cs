@@ -1,15 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
+using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
 
 namespace PersonalBlog.Web.Controllers;
 
+[ApiController]
 [Route("[controller]")]
-public class TagController(TagService tagService) : Controller
+public class TagApiController(TagService tagService) : Controller
 {
     [HttpPost("create")]
-    public IActionResult Create(Guid userId, string name, bool isPersonal = false)
+    public IActionResult Create([FromBody] TagDto dto)
     {
-        var success = tagService.AddTag(userId, name, isPersonal);
+        var success = tagService.AddTag(dto);
         if (!success) return BadRequest("Cannot create tag");
 
         return Ok("Tag created");
