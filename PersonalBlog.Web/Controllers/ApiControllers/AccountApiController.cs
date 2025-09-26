@@ -12,7 +12,7 @@ namespace PersonalBlog.Web.Controllers;
 public class AccountApiController(UserService userService) : Controller
 {
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] UserDto dto)
+    public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
         var user = userService.ValidateUser(dto);
         if (user == null) return Unauthorized(new { message = "Неверный логин или пароль" });
@@ -37,7 +37,7 @@ public class AccountApiController(UserService userService) : Controller
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties { IsPersistent = true };
-
+            
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),

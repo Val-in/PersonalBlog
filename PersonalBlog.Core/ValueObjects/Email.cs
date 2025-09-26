@@ -1,4 +1,4 @@
-namespace PersonalBlog.Core.Value_Objects;
+namespace PersonalBlog.Core.ValueObjects;
 
 /// <summary>
 /// Объект, определяемый своими значениями
@@ -23,5 +23,4 @@ public class Email
     }
 
     public override int GetHashCode() => Value.GetHashCode();
-    
 }

@@ -9,48 +9,41 @@ namespace PersonalBlog.Application.Services;
 /// </summary>
 public class
     UserService
-    (IUserRepository repo, IRoleRepository roleRepository)
+    (IUserRepository userRepository, IRoleRepository roleRepository)
 {
-    public User CreateUser(UserDto dto, string? roleName = null)
+    public User CreateUser(UserDto dto)
     {
         var user = new User
         {
             UserLogin = dto.Login,
             UserNickName = dto.Nickname,
+            Email = dto.Email,
             Password = dto.Password,
             LoginDate = DateTime.UtcNow
         };
-
-        repo.Add(user);
-
+        
         // Назначаем роль
-        string roleToAssign = roleName ?? "Пользователь"; 
+        string roleToAssign = "User"; 
         var role = roleRepository.GetByName(roleToAssign);
-        if (role != null)
-        {
-            user.UserRoles.Add(new UserRoles
-            {
-                User = user,
-                Role = role
-            });
-            repo.Update(user);
-        }
+        user.UserRoles.Add(new UserRoles { User = user, Role = role });
+        
+        userRepository.Add(user);
 
         return user;
     }
 
-    public User? ValidateUser(UserDto dto)
+    public User? ValidateUser(LoginDto dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Login) || string.IsNullOrWhiteSpace(dto.Password))
             return null;
 
-        var user = repo.GetByLogin(dto.Login);
+        var user = userRepository.GetByLogin(dto.Login);
         return user.Password == dto.Password ? user : null;
     }
 
     public UserResponseDto? GetById(Guid id) //возвращаем дто для контроллера
     {
-        var user = repo.GetById(id);
+        var user = userRepository.GetById(id);
 
         return new UserResponseDto
         {
@@ -61,22 +54,22 @@ public class
         };
     }
 
-    public IEnumerable<User> GetAll() => repo.GetAll();
+    public IEnumerable<User> GetAll() => userRepository.GetAll();
 
     public bool Update(Guid id, string dtoLogin, string dtoNickname)
     {
-        var user = repo.GetById(id);
+        var user = userRepository.GetById(id);
 
         user.UserLogin = dtoLogin;
         user.UserNickName = dtoNickname;
-        repo.Update(user);
+        userRepository.Update(user);
         return true;
     }
 
     public bool Delete(Guid id)
     {
-        var user = repo.GetById(id);
-        repo.Delete(user);
+        var user = userRepository.GetById(id);
+        userRepository.Delete(user);
         return true;
     }
 }

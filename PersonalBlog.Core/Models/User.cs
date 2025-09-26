@@ -1,4 +1,4 @@
-using PersonalBlog.Core.Value_Objects;
+using PersonalBlog.Core.ValueObjects;
 
 namespace PersonalBlog.Core.Models;
 

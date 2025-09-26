@@ -23,15 +23,15 @@ public class UserApiController(ILogger<UserApiController> logger, UserService se
     /// [FromBody] можно опустить, но многие ставят его для ясности кода.
     /// </summary>
     [HttpPost("register")]
-    public ActionResult<UserResponseDto> Register([FromBody] UserDto dto, [FromQuery] string? role) 
+    public ActionResult<UserResponseDto> Register([FromBody] UserDto dto) 
     {
         try
         {
-            var user = service.CreateUser(dto, role);
+            var user = service.CreateUser(dto);
             var response = new UserResponseDto
             {
                 Message = "Пользователь зарегистрирован",
-                Id = user.Id
+                Nickname = user.UserNickName
             };
             return Ok(response);
         }

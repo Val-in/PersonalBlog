@@ -5,7 +5,7 @@
 
 <h2>Добавить статью</h2>
 
-<select id="tagSelect" class="form-control mb-2" multiple> <!-- Теги будут загружены через loadTags --></select>
+<div id="tagContainer" class="mb-2"><!-- Теги будут загружены через loadTags --></div>
 <input type="text" id="titleInput" placeholder="Заголовок" class="form-control mb-2" />
 <textarea id="contentInput" placeholder="Контент" class="form-control mb-2"></textarea>
 
@@ -16,17 +16,21 @@
 async function loadTags() {
     const res = await fetch("/tagapi/all");
     const tags = await res.json();
-    const select = document.getElementById("tagSelect");
+    const container = document.getElementById("tagContainer"); // div для чекбоксов
+
     tags.forEach(t => {
-        const opt = document.createElement("option");
-        opt.text = t.tagName;
-        select.add(opt, null);
+        const label = document.createElement("label");
+        label.classList.add("mr-2"); // отступ справа
+        label.innerHTML = `
+            <input type="checkbox" class="tagCheckbox" value="${t.id}"> ${t.tagName}
+        `;
+        container.appendChild(label);
     });
 }
 async function createArticle() {
     const title = document.getElementById("titleInput").value;
     const content = document.getElementById("contentInput").value;
-    const selectedTags = Array.from(document.getElementById("tagSelect").selectedOptions).map(o => o.value);
+    const selectedTags = Array.from(document.querySelectorAll(".tagCheckbox:checked")).map(o => o.value);
 
     await fetch("/articleapi/create", {
         method: "POST",

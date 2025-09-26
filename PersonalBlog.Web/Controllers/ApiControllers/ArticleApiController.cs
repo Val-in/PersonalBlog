@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
@@ -12,7 +13,7 @@ public class ArticleApiController(ArticleService articleService) : Controller
     [HttpPost("create")]
     public IActionResult Create([FromBody] ArticleDto dto)
     {
-        var success = articleService.AddArticle(dto);
+        var success = articleService.AddArticle(dto, User);
         if (!success) return BadRequest("Cannot create article");
 
         return Ok("Article created");

@@ -1,41 +1,48 @@
+using System.Security.Claims;
 using PersonalBlog.Application.DTO;
 using PersonalBlog.Core.Interfaces;
 using PersonalBlog.Core.Models;
 
 namespace PersonalBlog.Application.Services;
 
-public class ArticleService(IArticleRepository repo)
+public class ArticleService(IArticleRepository articleRepository, IUserRepository userRepository)
 {
     /// <summary>
     /// AddArticle не маппит DTO в Entity, а просто создаёт Entity из параметров метода.
     /// </summary>
-    public bool AddArticle(ArticleDto dto)
+    public bool AddArticle(ArticleDto dto, ClaimsPrincipal user)
     {
         if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
             return false;
+        var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId == null) return false;
 
         var article = new Article
         {
-            AuthorId = dto.AuthorId,
             Title = dto.Title,
-            Content = dto.Content
+            Content = dto.Content,
+            AuthorId = Guid.Parse(userId), // привязываем текущего юзера
+            ArticleTags = dto.Tags
+                .Select(t => new ArticleTag
+                {
+                    TagId = t.TagId
+                })
+                .ToList()
         };
 
-        repo.Add(article);
+        articleRepository.Add(article);
         return true;
     }
 
     public ArticleDto? GetById(Guid id) //Сервис не должен возвращать Article?, а должен возвращать ArticleDto?
     {
-        var article = repo.GetById(id);
+        var article = articleRepository.GetById(id);
         if (article == null) return null;
 
         return new ArticleDto
         {
-            Id = article.ArticleId,
             Title = article.Title,
             Content = article.Content,
-            AuthorId = article.AuthorId,
             Tags = article.ArticleTags.Select(t => new TagDto
             {
                 TagId = t.TagId,
@@ -47,26 +54,26 @@ public class ArticleService(IArticleRepository repo)
 
     public IEnumerable<Article> GetByAuthor(Guid authorId)
     {
-        return repo.GetByAuthor(authorId);
+        return articleRepository.GetByAuthor(authorId);
     }
 
     public bool UpdateArticle(Guid id, string newTitle, string newContent)
     {
-        var article = repo.GetById(id);
+        var article = articleRepository.GetById(id);
         if (article == null) return false;
 
         article.Title = newTitle;
         article.Content = newContent;
-        repo.Update(article);
+        articleRepository.Update(article);
         return true;
     }
 
     public bool DeleteArticle(Guid id)
     {
-        var article = repo.GetById(id);
+        var article = articleRepository.GetById(id);
         if (article == null) return false;
 
-        repo.Delete(article);
+        articleRepository.Delete(article);
         return true;
     }
 }

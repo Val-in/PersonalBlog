@@ -9,33 +9,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewData["Title"] - PersonalBlog</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="~/css/main.css" />
+    <link rel="stylesheet" href="PersonalBlog.Web/wwwroot/css/main.css" />
 </head>
 <body>
 
 <!-- HEADER -->
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">PersonalBlog</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        @if (User.Identity.IsAuthenticated)
-        {
+    <a class="navbar-brand" href="/">PersonalBlog</a>
+    @if (User.Identity.IsAuthenticated)
+    {
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item"><a class="nav-link" asp-controller="UserView" asp-action="Index">Пользователи</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-controller="RoleView" asp-action="Index">Роли</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-controller="ArticleView" asp-action="Index">Статьи</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-controller="CommentView" asp-action="Index">Комментарии</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/UserView/UserList">Пользователи</a></li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item"><a class="nav-link" href="/RoleView/RoleList">Роли</a></li>
+                    }
+                    <li class="nav-item"><a class="nav-link" href="/ArticleView/ArticleList">Статьи</a></li>
                 </ul>
                 <button id="logoutBtn" class="btn btn-outline-light">Выход</button>
             </div>
-        }
-        else
-        {
-            <a class="btn btn-outline-light" href="/AccountView/Login">Вход</a>
-        }
+    }
+    else
+    {
+        <a class="btn btn-outline-light" href="/AccountView/Login">Вход</a>
+    }
     </nav>
 </header>
 

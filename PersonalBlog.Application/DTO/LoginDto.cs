@@ -1,16 +1,11 @@
 using System.ComponentModel.DataAnnotations;
-using PersonalBlog.Core.ValueObjects;
 
 namespace PersonalBlog.Application.DTO;
 
-public class UserDto
+public class LoginDto
 {
-    public string? Nickname { get; set; }
     [Required]
     public string? Login { get; set; }
     [Required]
     public string? Password { get; set; }
-    
-    [Required]
-    public Email? Email { get; set; }
 }

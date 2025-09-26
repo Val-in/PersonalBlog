@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PersonalBlog.Core.Interfaces;
 using PersonalBlog.Core.Models;
 
@@ -15,7 +16,10 @@ public class UserRepository(AppDbContext context) : IUserRepository
         context.SaveChanges();
     }
     
-    public User GetByLogin(string login) => context.Users.FirstOrDefault(u => u.UserLogin == login)!;
+    public User GetByLogin(string login) => context.Users
+        .Include(u => u.UserRoles)           // подгружаем связи UserRoles
+        .ThenInclude(ur => ur.Role)      // подгружаем Role внутри UserRoles
+        .FirstOrDefault(u => u.UserLogin == login)!;
     
     public IEnumerable<User> GetAll() => context.Users.ToList();
     public void Update(User user)

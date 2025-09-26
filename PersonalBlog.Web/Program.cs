@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PersonalBlog.Application.Services;
 using PersonalBlog.Core.DomainServices;
 using PersonalBlog.Core.Interfaces;
+using PersonalBlog.Core.ValueObjects;
 using PersonalBlog.Infrastructure;
 using PersonalBlog.Infrastructure.Repositories;
 
@@ -14,7 +15,12 @@ public static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllersWithViews();
+        builder.Services.AddControllersWithViews()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new EmailConverter());
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+            });
         
         var dbPath = builder.Configuration.GetConnectionString("DefaultConnection");
         Console.WriteLine("EF Core будет использовать SQLite файл: " + Path.GetFullPath(dbPath));

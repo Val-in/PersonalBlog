@@ -11,12 +11,12 @@
 }
 
 <h2>Все статьи</h2>
-<a class="btn btn-primary mb-2" asp-controller="ArticleView" asp-action="Create">Добавить статью</a>
+<a class="btn btn-primary mb-2" href="/ArticleView/ArticleCreate">Добавить статью</a>
 <ul id="articleList" class="list-group"></ul>
 
 <script>
 async function loadArticles() {
-    const res = await fetch("/api/article/all");
+    const res = await fetch("/articleapi/all");
     const articles = await res.json();
     const list = document.getElementById("articleList");
     list.innerHTML = "";
