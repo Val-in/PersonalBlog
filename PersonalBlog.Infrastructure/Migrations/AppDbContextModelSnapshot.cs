@@ -90,6 +90,9 @@ namespace PersonalBlog.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("RoleName")
                         .HasColumnType("TEXT");
 
@@ -222,7 +225,7 @@ namespace PersonalBlog.Infrastructure.Migrations
 
             modelBuilder.Entity("PersonalBlog.Core.Models.User", b =>
                 {
-                    b.OwnsOne("PersonalBlog.Core.Value_Objects.Email", "Email", b1 =>
+                    b.OwnsOne("PersonalBlog.Core.ValueObjects.Email", "Email", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("TEXT");
