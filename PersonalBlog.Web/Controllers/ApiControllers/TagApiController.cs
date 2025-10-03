@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
@@ -11,6 +12,11 @@ public class TagApiController(TagService tagService) : Controller
     [HttpPost("create")]
     public IActionResult Create([FromBody] TagDto dto)
     {
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+        if (userIdClaim == null) return Unauthorized();
+
+        dto.UserId = Guid.Parse(userIdClaim.Value);
+        
         var success = tagService.AddTag(dto);
         if (!success) return BadRequest("Cannot create tag");
 
@@ -34,12 +40,15 @@ public class TagApiController(TagService tagService) : Controller
     }
 
     [HttpPost("edit/{id:guid}")]
-    public IActionResult Edit(Guid id, Guid userId, string newName)
+    public IActionResult Edit(Guid id, [FromBody] TagEditDto dto)
     {
-        var success = tagService.UpdateTag(id, userId, newName);
-        if (!success) return BadRequest("Cannot update tag");
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        if (userIdClaim == null) return Unauthorized();
 
-        return Ok("Tag updated");
+        var userId = Guid.Parse(userIdClaim.Value);
+        var success = tagService.UpdateTag(id, userId, dto.Name);
+
+        return success ? Ok("Tag updated") : BadRequest("Cannot update tag");
     }
 
     [HttpPost("delete/{id:guid}")]

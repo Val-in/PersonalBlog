@@ -21,7 +21,7 @@ public class AccountApiController(UserService userService) : Controller
         {
             var claims = new List<Claim>
             {
-                new(ClaimTypes.NameIdentifier, user.UserLogin),
+                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new(ClaimTypes.Name, user.UserLogin)
             };
 

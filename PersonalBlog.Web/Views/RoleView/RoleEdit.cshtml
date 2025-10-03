@@ -12,14 +12,19 @@
 <a href="/RoleView/RoleList">Все роли</a>
 
 <script>
+    function getQueryParam(param) {
+        return new URLSearchParams(window.location.search).get(param);
+    }
+    
 async function saveRole() {
+    const roleId = getQueryParam("roleId");
     const dto = { roleName: document.getElementById("roleName").value, description: document.getElementById("roleDesc").value };
-    await fetch("/api/role/edit/" + ROLE_ID, {
+    await fetch("/roleapi/edit/" + roleId, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dto)
     });
     alert("Роль обновлена");
-    window.location.href = "/RoleView/Index";
+    window.location.href = "/RoleView/RoleList";
 }
 </script>

@@ -12,4 +12,6 @@
 
 /PersonalBlog/.idea/
 
-
+/PersonalBlog.Api/obj/
+/PersonalBlog/.vs/
+/PersonalBlog/obj/

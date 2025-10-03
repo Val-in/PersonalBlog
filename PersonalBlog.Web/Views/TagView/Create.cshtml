@@ -12,7 +12,7 @@
 async function createTag(){
     let dto = {
         TagName: document.getElementById("tagName").value,
-        IsPersonal: true
+        IsPersonal: true,
     };
     await fetch("/tagapi/create", {
         method: "POST",

@@ -4,12 +4,6 @@
     Layout = "_Layout";
 }
 
-@if (User.Identity.IsAuthenticated)
-{
-    <p>Привет, @User.Identity.Name!</p>
-    <p>Роли: @string.Join(", ", User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value))</p>
-}
-
 <h2>Все статьи</h2>
 <a class="btn btn-primary mb-2" href="/ArticleView/ArticleCreate">Добавить статью</a>
 <ul id="articleList" class="list-group"></ul>
@@ -22,10 +16,10 @@ async function loadArticles() {
     list.innerHTML = "";
     articles.forEach(a => {
         list.innerHTML += `<li class="list-group-item">
-            <strong>${a.title}</strong> 
-            <a class="btn btn-sm btn-primary float-right ml-1" href="/ArticleView/Edit/${a.id}">Редактировать</a>
-            <a class="btn btn-sm btn-secondary float-right" href="/ArticleView/Details/${a.id}">Посмотреть</a>
-        </li>`;
+        <strong>${a.title}</strong> 
+        <a class="btn btn-sm btn-primary float-right ml-1" href="/ArticleView/ArticleEdit?articleId=${a.articleId}">Редактировать</a>
+        <a class="btn btn-sm btn-secondary float-right" href="/ArticleView/ArticleDetails?articleId=${a.articleId}">Посмотреть</a>
+    </li>`;
     });
 }
 loadArticles();

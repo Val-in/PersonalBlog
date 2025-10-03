@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using PersonalBlog.Core.Interfaces;
 using PersonalBlog.Core.Models;
 
@@ -31,5 +32,14 @@ public class ArticleRepository(AppDbContext context) : IArticleRepository
     {
         context.Articles.Remove(article);
         context.SaveChanges();
+    }
+
+    public List<Article> GetAll()
+    {
+        return context.Articles
+            .Include(a => a.ArticleTags)
+            .ThenInclude(at => at.Tag)
+            .Include(a => a.User) // если нужен автор
+            .ToList();
     }
 }

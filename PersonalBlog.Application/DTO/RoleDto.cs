@@ -2,6 +2,8 @@ namespace PersonalBlog.Application.DTO;
 
 public class RoleDto
 {
-    public Guid Id { get; set; }
+    public int RoleId { get; set; }
     public string RoleName { get; set; } = null!;
+    
+    public string Description { get; set; } = null!;
 }

@@ -4,19 +4,21 @@
 }
 
 <h2>Все теги</h2>
+<a class="btn btn-primary mb-2" href="/TagView/Create">Добавить тег</a>
 
 <ul id="tagList" class="list-group"></ul>
 
 <script>
 async function loadTags() {
-    const res = await fetch("/api/tag/all");
+    const res = await fetch("/tagapi/all");
     const tags = await res.json();
     const list = document.getElementById("tagList");
     list.innerHTML = "";
+    
     tags.forEach(t => {
         list.innerHTML += `<li class="list-group-item">
             ${t.tagName} 
-            <a class="btn btn-sm btn-primary float-right" href="/TagView/Edit/${t.id}">Редактировать</a>
+            <a class="btn btn-sm btn-primary float-right" href="/TagView/TagEdit?tagId=${t.tagId}">Редактировать</a>
         </li>`;
     });
 }

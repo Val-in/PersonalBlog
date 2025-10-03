@@ -14,7 +14,8 @@ public class TagService(ITagRepository tagRepository)
         {
             TagName = dto.TagName,
             IsPersonal = dto.IsPersonal ?? false,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UserId =  dto.UserId
         };
 
         return tagRepository.Add(tag);

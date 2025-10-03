@@ -11,7 +11,7 @@ public class ArticleApiController(ArticleService articleService) : Controller
 {
     // Создание статьи
     [HttpPost("create")]
-    public IActionResult Create([FromBody] ArticleDto dto)
+    public IActionResult Create([FromBody] ArticleCreateDto dto)
     {
         var success = articleService.AddArticle(dto, User);
         if (!success) return BadRequest("Cannot create article");
@@ -19,13 +19,13 @@ public class ArticleApiController(ArticleService articleService) : Controller
         return Ok("Article created");
     }
 
-    [HttpGet("{id:guid}")]
-    public IActionResult Get(Guid id)
+    [HttpGet("all")]
+    public IActionResult Get()
     {
-        var article = articleService.GetById(id);
-        if (article == null) return NotFound();
+        var articles = articleService.GetAll();
+        if (articles == null) return NotFound();
 
-        return Ok(article);
+        return Ok(articles);
     }
 
     [HttpGet("by-author/{authorId:guid}")]

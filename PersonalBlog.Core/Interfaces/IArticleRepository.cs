@@ -9,4 +9,5 @@ public interface IArticleRepository
     IEnumerable<Article> GetByAuthor(Guid authorId);
     void Update(Article article);
     void Delete(Article article);
+    List<Article> GetAll();
 }

@@ -7,13 +7,10 @@ namespace PersonalBlog.Application.Services;
 
 public class ArticleService(IArticleRepository articleRepository, IUserRepository userRepository)
 {
-    /// <summary>
-    /// AddArticle не маппит DTO в Entity, а просто создаёт Entity из параметров метода.
-    /// </summary>
-    public bool AddArticle(ArticleDto dto, ClaimsPrincipal user)
+    public bool AddArticle(ArticleCreateDto dto, ClaimsPrincipal user)
     {
         if (string.IsNullOrWhiteSpace(dto.Title) || string.IsNullOrWhiteSpace(dto.Content))
-            return false;
+            return false; 
         var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userId == null) return false;
 
@@ -25,7 +22,7 @@ public class ArticleService(IArticleRepository articleRepository, IUserRepositor
             ArticleTags = dto.Tags
                 .Select(t => new ArticleTag
                 {
-                    TagId = t.TagId
+                    TagId = t
                 })
                 .ToList()
         };
@@ -34,7 +31,7 @@ public class ArticleService(IArticleRepository articleRepository, IUserRepositor
         return true;
     }
 
-    public ArticleDto? GetById(Guid id) //Сервис не должен возвращать Article?, а должен возвращать ArticleDto?
+    public ArticleDto? GetById(Guid id) 
     {
         var article = articleRepository.GetById(id);
         if (article == null) return null;
@@ -43,6 +40,7 @@ public class ArticleService(IArticleRepository articleRepository, IUserRepositor
         {
             Title = article.Title,
             Content = article.Content,
+            AuthorName = article.User?.UserNickName ?? "Неизвестно",
             Tags = article.ArticleTags.Select(t => new TagDto
             {
                 TagId = t.TagId,
@@ -52,7 +50,7 @@ public class ArticleService(IArticleRepository articleRepository, IUserRepositor
         };
     }
 
-    public IEnumerable<Article> GetByAuthor(Guid authorId)
+    public IEnumerable<Article> GetByAuthor(Guid authorId) //поменять на DTO
     {
         return articleRepository.GetByAuthor(authorId);
     }
@@ -75,5 +73,20 @@ public class ArticleService(IArticleRepository articleRepository, IUserRepositor
 
         articleRepository.Delete(article);
         return true;
+    }
+
+    public List<ArticleDto> GetAll()
+    {
+        var articles = articleRepository.GetAll();
+        return articles.Select(article => new ArticleDto
+        {
+            Title = article.Title,
+            Content = article.Content,
+            Tags = article.ArticleTags.Select(t => new TagDto
+            {
+                TagId = t.TagId,
+                TagName = t.Tag!.TagName
+            }).ToList()
+        }).ToList();
     }
 }

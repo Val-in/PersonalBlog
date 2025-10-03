@@ -6,7 +6,7 @@
 <h2 id="articleTitle"></h2>
 <p>Автор: <span id="articleAuthor"></span></p>
 <p id="articleContent"></p>
-<div id="articleTags"></div>
+<div id="articleTags" class="mb-2"></div>
 
 <hr>
 <h5>Комментарии</h5>
@@ -17,16 +17,22 @@
 
 <script>
 async function loadArticle() {
-    const res = await fetch("/articleapi/details/{id}");
+    const ARTICLE_ID = '@ViewData["ArticleId"]';
+    console.log("ARTICLE_ID =", ARTICLE_ID);
+    const res = await fetch(`/articleapi/details/${ARTICLE_ID}`);
+    if (!res.ok) {
+        console.error("Ошибка запроса:", res.status);
+        return;
+    }
     const a = await res.json();
     document.getElementById("articleTitle").innerText = a.title;
-    document.getElementById("articleAuthor").innerText = a.id;
+    document.getElementById("articleAuthor").innerText = a.authorName;
     document.getElementById("articleContent").innerText = a.content;
 
     const tagsDiv = document.getElementById("articleTags");
     tagsDiv.innerHTML = "Теги: " + (a.tags?.map(t => `<span class="badge badge-info mr-1">${t.tagName}</span>`).join("") ?? "");
-    
-    const commentsRes = await fetch("/commentapi/{id:guid}/");
+
+    const commentsRes = await fetch(`/commentapi/${ARTICLE_ID}`);
     const comments = await commentsRes.json();
     const commentsList = document.getElementById("commentsList");
     commentsList.innerHTML = "";
@@ -34,15 +40,16 @@ async function loadArticle() {
         commentsList.innerHTML += `<li class="list-group-item">${c.text}</li>`;
     });
 }
+
 async function addComment() {
     const text = document.getElementById("commentInput").value;
     await fetch("/commentapi/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ articleId: ARTICLE_ID, text, userId: USER_ID })
+        body: JSON.stringify({ articleId: ARTICLE_ID, text})
     });
     document.getElementById("commentInput").value = "";
-    loadArticle();
+    await loadArticle();
 }
 loadArticle();
 </script>

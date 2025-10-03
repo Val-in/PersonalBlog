@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace PersonalBlog.Core.Models;
 
 public class Article

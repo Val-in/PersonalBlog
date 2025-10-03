@@ -4,21 +4,25 @@
 }
 
 <h2>Редактировать тег</h2>
-
 <input type="text" id="tagName" class="form-control mb-2" placeholder="Название тега" />
-
 <button class="btn btn-primary" onclick="saveTag()">Сохранить</button>
 <a href="/TagView/TagList">Перейти к списку всех тегов</a>
 
 <script>
-async function saveTag() {
-    const dto = { name: document.getElementById("tagName").value };
-    await fetch("/api/tag/edit/" + TAG_ID, {  // TAG_ID задается через query string или Razor
+    function getQueryParam(param) {
+        return new URLSearchParams(window.location.search).get(param);
+    }
+
+    async function saveTag() {
+        const tagId = getQueryParam("tagId");
+        const dto = { name: document.getElementById("tagName").value };
+
+        await fetch("/tagapi/edit/" + tagId, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dto)
     });
     alert("Тег обновлен");
-    window.location.href = "/TagView/Index";
+    window.location.href = "/TagView/TagList";
 }
 </script>

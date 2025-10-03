@@ -4,19 +4,19 @@
 }
 
 <h2>Все роли</h2>
-
 <ul id="roleList" class="list-group"></ul>
 
 <script>
 async function loadRoles() {
-    const res = await fetch("/api/role/all");
+    const res = await fetch("/roleapi/all");
     const roles = await res.json();
     const list = document.getElementById("roleList");
     list.innerHTML = "";
+    
     roles.forEach(r => {
         list.innerHTML += `<li class="list-group-item">
             ${r.roleName} - ${r.description}
-            <a class="btn btn-sm btn-primary float-right" href="/RoleView/Edit/${r.id}">Редактировать</a>
+            <a class="btn btn-sm btn-primary float-right" href="/RoleView/RoleEdit?roleId=${r.roleId}">Редактировать</a>
         </li>`;
     });
 }

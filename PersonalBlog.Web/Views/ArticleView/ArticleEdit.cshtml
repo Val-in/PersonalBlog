@@ -5,7 +5,7 @@
 
 <h2>Редактировать статью</h2>
 
-<select id="tagSelect" class="form-control mb-2" multiple></select>
+<div id="tagContainer" class="mb-2"><!-- Теги будут загружены через loadTags --></div>
 <input type="text" id="titleInput" class="form-control mb-2" placeholder="Заголовок" />
 <textarea id="contentInput" class="form-control mb-2" placeholder="Контент"></textarea>
 
@@ -14,17 +14,23 @@
 
 <script>
 async function loadTags() {
-    const res = await fetch("/api/tag/all");
+    const res = await fetch("/tagapi/all");
     const tags = await res.json();
-    const select = document.getElementById("tagSelect");
+    const container = document.getElementById("tagContainer"); // div для чекбоксов
+
     tags.forEach(t => {
-        const opt = document.createElement("option");
-        opt.value = t.id;
-        opt.text = t.tagName;
-        select.add(opt);
+        const label = document.createElement("label");
+        label.classList.add("mr-2"); // отступ справа
+        label.innerHTML = `
+            <input type="checkbox" class="tagCheckbox" value="${t.id}"> ${t.tagName}
+        `;
+        container.appendChild(label);
     });
 }
+
 async function saveArticle() {
+    const pathParts = window.location.pathname.split("/");
+    const ARTICLE_ID = pathParts[pathParts.length - 1];
     const title = document.getElementById("titleInput").value;
     const content = document.getElementById("contentInput").value;
     const selectedTags = Array.from(document.getElementById("tagSelect").selectedOptions).map(o => o.value);
