@@ -37,6 +37,7 @@ public static class Program
         builder.Services.AddScoped<ArticleService>();
         builder.Services.AddScoped<CommentService>();
         builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+        builder.Services.AddScoped<RoleService>();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         

@@ -14,8 +14,13 @@ public class ArticleRepository(AppDbContext context) : IArticleRepository
 
     public Article? GetById(Guid id)
     {
-        return context.Articles.Find(id);
+        return context.Articles
+            .Include(a => a.ArticleTags)
+            .ThenInclude(at => at.Tag)
+            .Include(a => a.User)
+            .FirstOrDefault(a => a.ArticleId == id);
     }
+
 
     public IEnumerable<Article> GetByAuthor(Guid authorId)
     {
@@ -24,7 +29,6 @@ public class ArticleRepository(AppDbContext context) : IArticleRepository
 
     public void Update(Article article)
     {
-        context.Articles.Update(article);
         context.SaveChanges();
     }
 

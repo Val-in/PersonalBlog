@@ -51,7 +51,7 @@ public class UserApiController(ILogger<UserApiController> logger, UserService se
         return Ok(user);
     }
     
-    [HttpGet]
+    [HttpGet("all")]
     public IActionResult GetAll()
     {
         var users = service.GetAll()

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
@@ -8,10 +9,14 @@ namespace PersonalBlog.Web.Controllers;
 [Route("[controller]")]
 public class CommentApiController(AppCommentService commentService) : Controller
 {
-    [HttpPost]
+    [HttpPost("create")]
     public IActionResult Create([FromBody] CommentDto dto)
     {
-        var success = commentService.AddComment(dto.UserId, dto.ArticleId, dto.Text);
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        if (userIdClaim == null) return Unauthorized();
+
+        var userId = Guid.Parse(userIdClaim.Value);
+        var success = commentService.AddComment(userId, dto.ArticleId, dto.Text);
         if (!success) return BadRequest("Cannot create comment");
 
         return Ok("Comment created");

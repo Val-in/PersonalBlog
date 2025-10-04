@@ -38,15 +38,17 @@ public class ArticleService(IArticleRepository articleRepository, IUserRepositor
 
         return new ArticleDto
         {
+            ArticleId = article.ArticleId,
             Title = article.Title,
             Content = article.Content,
             AuthorName = article.User?.UserNickName ?? "Неизвестно",
-            Tags = article.ArticleTags.Select(t => new TagDto
-            {
-                TagId = t.TagId,
-                TagName = t.Tag.TagName
-            }).ToList()
-            
+            Tags = article.ArticleTags
+                .Select(at => new TagDto
+                {
+                    TagId = at.TagId,
+                    TagName = at.Tag.TagName
+                })
+                .ToList()
         };
     }
 
@@ -55,13 +57,21 @@ public class ArticleService(IArticleRepository articleRepository, IUserRepositor
         return articleRepository.GetByAuthor(authorId);
     }
 
-    public bool UpdateArticle(Guid id, string newTitle, string newContent)
+    public bool UpdateArticle(Guid id, ArticleUpdateDto dto)
     {
         var article = articleRepository.GetById(id);
         if (article == null) return false;
 
-        article.Title = newTitle;
-        article.Content = newContent;
+        article.Title = dto.Title;
+        article.Content = dto.Content;
+
+        // заменить теги
+        article.ArticleTags.Clear();
+        foreach (var tagId in dto.Tags)
+        {
+            article.ArticleTags.Add(new ArticleTag { ArticleId = id, TagId = tagId });
+        }
+
         articleRepository.Update(article);
         return true;
     }
@@ -80,8 +90,10 @@ public class ArticleService(IArticleRepository articleRepository, IUserRepositor
         var articles = articleRepository.GetAll();
         return articles.Select(article => new ArticleDto
         {
+            ArticleId = article.ArticleId,   
             Title = article.Title,
             Content = article.Content,
+            AuthorName = article.User != null ? article.User.UserNickName : "",
             Tags = article.ArticleTags.Select(t => new TagDto
             {
                 TagId = t.TagId,

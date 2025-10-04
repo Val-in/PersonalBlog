@@ -8,25 +8,38 @@
 <div id="usersContainer" class="row"></div>
 
 <script>
-async function loadUsers() {
-    const res = await fetch("/api/UserApi");
-    const users = await res.json();
-    const container = document.getElementById("usersContainer");
-    container.innerHTML = "";
+    async function loadUsers() {
+        const container = document.getElementById("usersContainer");
 
-    users.forEach(u => {
-        const roles = u.roles.map(r => `<span class="badge badge-info mr-1">${r}</span>`).join("");
-        container.innerHTML += `
+        // Получаем текущего пользователя с API, исправить на поиск по айди, ане на новый контроллер current
+        const currentRes = await fetch("/userapi/current");
+        const currentUser = await currentRes.json();
+        const currentUserId = currentUser.id;
+
+        const res = await fetch("/userapi/all");
+        const users = await res.json();
+        container.innerHTML = "";
+
+        users.forEach(u => {
+            const roles = u.roles.map(r => `<span class="badge bg-info text-dark me-1">${r}</span>`).join("");
+
+            let editButton = "";
+            if (u.id === currentUserId) {
+                editButton = `<a class="btn btn-sm btn-primary mt-2" href="/UserView/UserEdit/${u.id}">Редактировать</a>`;
+            }
+
+            container.innerHTML += `
             <div class="col-md-3 mb-3">
                 <div class="card p-2">
-                    <h5>${u.nickname}</h5>
+                    <h5>${u.nickName}</h5>
                     <p>${u.login}</p>
                     ${roles}
-                    <a class="btn btn-sm btn-primary mt-2" href="/UserView/Edit/${u.id}">Редактировать</a>
+                    ${editButton}
                 </div>
             </div>
         `;
-    });
-}
-loadUsers();
+        });
+    }
+
+    loadUsers();
 </script>

@@ -13,6 +13,10 @@
 <a href="/ArticleView/ArticleList">Выйти без сохранения</a>
 
 <script>
+    function getQueryParam(param) {
+        return new URLSearchParams(window.location.search).get(param);
+    }
+        
 async function loadTags() {
     const res = await fetch("/tagapi/all");
     const tags = await res.json();
@@ -22,26 +26,45 @@ async function loadTags() {
         const label = document.createElement("label");
         label.classList.add("mr-2"); // отступ справа
         label.innerHTML = `
-            <input type="checkbox" class="tagCheckbox" value="${t.id}"> ${t.tagName}
+            <input type="checkbox" class="tagCheckbox" value="${t.tagId}"> ${t.tagName}
         `;
         container.appendChild(label);
     });
 }
 
+    async function loadArticle() {
+        const articleId = getQueryParam("articleId");
+
+        const res = await fetch("/articleapi/details/" + articleId);
+        const article = await res.json();
+
+        document.getElementById("titleInput").value = article.title;
+        document.getElementById("contentInput").value = article.content;
+
+        (article.tags || []).forEach(t => {
+            const cb = document.querySelector(`.tagCheckbox[value="${t.tagId}"]`);
+            if (cb) cb.checked = true;
+        });
+    }
+
 async function saveArticle() {
-    const pathParts = window.location.pathname.split("/");
-    const ARTICLE_ID = pathParts[pathParts.length - 1];
+    const articleId = getQueryParam("articleId");
     const title = document.getElementById("titleInput").value;
     const content = document.getElementById("contentInput").value;
-    const selectedTags = Array.from(document.getElementById("tagSelect").selectedOptions).map(o => o.value);
+    const selectedTags = Array.from(document.querySelectorAll(".tagCheckbox:checked"))
+        .map(cb => cb.value);
 
-    await fetch("/api/article/edit/" + ARTICLE_ID, {
+    await fetch("/articleapi/edit/" + articleId, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, content, tags: selectedTags })
+        body: JSON.stringify({ Title: title, Content: content, Tags: selectedTags })
+
     });
     alert("Статья обновлена");
-    window.location.href = "/ArticleView/Index";
+    window.location.href = "/ArticleView/ArticleList";
 }
-loadTags();
+    (async function init() {
+        await loadTags();
+        await loadArticle();
+    })();
 </script>

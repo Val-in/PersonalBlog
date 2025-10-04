@@ -18,11 +18,20 @@ public class RoleApiController : ControllerBase
     [HttpGet("all")]
     public IActionResult GetAll()
     {
-        var roles = _roleService.GetAll();
-        if (roles == null || !roles.Any())
-            return NotFound();
+        try
+        {
+            var roles = _roleService.GetAll();
+            if (roles == null || !roles.Any())
+                return NotFound();
 
-        return Ok(roles); // возвращаем JSON
+            return Ok(roles);
+        }
+        catch (Exception ex)
+        {
+            // Логирование
+            Console.WriteLine(ex);
+            return StatusCode(500, ex.Message);
+        }
     }
     
     [HttpPost("edit/{id:int}")]

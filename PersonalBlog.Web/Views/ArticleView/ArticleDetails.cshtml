@@ -16,10 +16,17 @@
 <button class="btn btn-primary" onclick="addComment()">Отправить</button>
 
 <script>
+function getQueryParam(param) {
+    return new URLSearchParams(window.location.search).get(param);
+}
+
+const articleId = getQueryParam("articleId"); // берём из URL
+
 async function loadArticle() {
-    const ARTICLE_ID = '@ViewData["ArticleId"]';
-    console.log("ARTICLE_ID =", ARTICLE_ID);
-    const res = await fetch(`/articleapi/details/${ARTICLE_ID}`);
+    console.log("articleId =", articleId);
+
+    // Загрузка статьи
+    const res = await fetch(`/articleapi/details/${articleId}`);
     if (!res.ok) {
         console.error("Ошибка запроса:", res.status);
         return;
@@ -29,10 +36,16 @@ async function loadArticle() {
     document.getElementById("articleAuthor").innerText = a.authorName;
     document.getElementById("articleContent").innerText = a.content;
 
+    // Теги
     const tagsDiv = document.getElementById("articleTags");
     tagsDiv.innerHTML = "Теги: " + (a.tags?.map(t => `<span class="badge badge-info mr-1">${t.tagName}</span>`).join("") ?? "");
 
-    const commentsRes = await fetch(`/commentapi/${ARTICLE_ID}`);
+    // Комментарии
+    const commentsRes = await fetch(`/commentapi/${articleId}`);
+    if (!commentsRes.ok) {
+        console.error("Ошибка загрузки комментариев:", commentsRes.status);
+        return;
+    }
     const comments = await commentsRes.json();
     const commentsList = document.getElementById("commentsList");
     commentsList.innerHTML = "";
@@ -43,13 +56,22 @@ async function loadArticle() {
 
 async function addComment() {
     const text = document.getElementById("commentInput").value;
-    await fetch("/commentapi/create", {
+    if (!text.trim()) return;
+
+    const res = await fetch("/commentapi/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ articleId: ARTICLE_ID, text})
+        body: JSON.stringify({ articleId: articleId, text })
     });
+
+    if (!res.ok) {
+        console.error("Ошибка добавления комментария:", res.status);
+        return;
+    }
+
     document.getElementById("commentInput").value = "";
     await loadArticle();
 }
+
 loadArticle();
 </script>

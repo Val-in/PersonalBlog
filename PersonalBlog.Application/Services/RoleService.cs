@@ -19,7 +19,7 @@ public class RoleService
             {
                 RoleId = r.RoleId,
                 RoleName = r.RoleName,
-                Description = r.Description
+                Description = r.Description ?? ""
             }).ToList();
     }
 

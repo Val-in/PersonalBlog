@@ -35,7 +35,7 @@ public class ArticleApiController(ArticleService articleService) : Controller
         return Ok(articles);
     }
     
-    [HttpGet("details/{id}")]
+    [HttpGet("details/{id:guid}")]
     public IActionResult Details(Guid id)
     {
         var articleDto = articleService.GetById(id); 
@@ -45,9 +45,9 @@ public class ArticleApiController(ArticleService articleService) : Controller
     }
 
     [HttpPost("edit/{id:guid}")]
-    public IActionResult Edit(Guid id, string newTitle, string newContent)
+    public IActionResult Edit(Guid id, ArticleUpdateDto dto)
     {
-        var success = articleService.UpdateArticle(id, newTitle, newContent);
+        var success = articleService.UpdateArticle(id, dto);
         if (!success) return BadRequest("Cannot update article");
 
         return Ok("Article updated");
