@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
@@ -53,6 +54,7 @@ public class ArticleApiController(ArticleService articleService) : Controller
         return Ok("Article updated");
     }
 
+    [Authorize(Roles = "Moderator")]
     [HttpPost("delete/{id:guid}")]
     public IActionResult Delete(Guid id)
     {

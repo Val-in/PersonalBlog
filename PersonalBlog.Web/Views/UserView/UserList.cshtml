@@ -13,8 +13,8 @@
 
         // Получаем текущего пользователя с API, исправить на поиск по айди, ане на новый контроллер current
         const currentRes = await fetch("/userapi/current");
-        const currentUser = await currentRes.json();
-        const currentUserId = currentUser.id;
+        const currentUser = currentRes.ok ? await currentRes.json() : null;
+        const currentUserId = currentUser ? currentUser.id : null;
 
         const res = await fetch("/userapi/all");
         const users = await res.json();
@@ -31,7 +31,7 @@
             container.innerHTML += `
             <div class="col-md-3 mb-3">
                 <div class="card p-2">
-                    <h5>${u.nickName}</h5>
+                    <h5>${u.nickname}</h5>
                     <p>${u.login}</p>
                     ${roles}
                     ${editButton}

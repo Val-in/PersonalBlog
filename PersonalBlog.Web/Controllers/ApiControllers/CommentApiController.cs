@@ -22,7 +22,7 @@ public class CommentApiController(AppCommentService commentService) : Controller
         return Ok("Comment created");
     }
     
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:guid}")] //возвращает для редактирования статьи
     public IActionResult Get(Guid id)
     {
         var comment = commentService.GetById(id);
@@ -31,7 +31,7 @@ public class CommentApiController(AppCommentService commentService) : Controller
         return Ok(comment);
     }
     
-    [HttpGet("byarticle/{articleId}")]
+    [HttpGet("byarticle/{articleId}")] //возвращает комментарии статьи
     public IActionResult GetByArticle(Guid articleId)
     {
         var comments = commentService.GetByArticleId(articleId);

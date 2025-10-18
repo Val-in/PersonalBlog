@@ -11,7 +11,8 @@ public class CommentService(IArticleRepository articleRepo)
     public bool CanUserComment(Guid userId, Guid articleId)
     {
         var article = articleRepo.GetById(articleId);
-        
-        return article is { User: not null } && article.User.Id != userId;
+        return article != null && article.AuthorId == userId;
+
+        //return article is { User: not null } && article.User.Id != userId;
     }
 }

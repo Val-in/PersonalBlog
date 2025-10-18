@@ -41,7 +41,7 @@ async function loadArticle() {
     tagsDiv.innerHTML = "Теги: " + (a.tags?.map(t => `<span class="badge badge-info mr-1">${t.tagName}</span>`).join("") ?? "");
 
     // Комментарии
-    const commentsRes = await fetch(`/commentapi/${articleId}`);
+    const commentsRes = await fetch(`/commentapi/byarticle/${articleId}`);
     if (!commentsRes.ok) {
         console.error("Ошибка загрузки комментариев:", commentsRes.status);
         return;
