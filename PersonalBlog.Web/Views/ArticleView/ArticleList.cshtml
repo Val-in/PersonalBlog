@@ -20,7 +20,7 @@ async function loadArticles() {
         list.innerHTML += `<li class="list-group-item">
         <strong>${a.title}</strong> 
         <a class="btn btn-sm btn-primary float-right ml-1" href="/ArticleView/ArticleEdit?articleId=${a.articleId}">Редактировать</a>
-        <a class="btn btn-sm btn-secondary float-right" href="/ArticleView/ArticleDetails?articleId=${a.articleId}">Посмотреть</a>
+        <a class="btn btn-sm btn-secondary float-right ml-1" href="/ArticleView/ArticleDetails?articleId=${a.articleId}">Посмотреть</a>
         @if (isModerator)
         {
         <button class="btn btn-sm btn-danger float-right ml-1" onclick="deleteArticle('${a.articleId}')">Удалить</button>

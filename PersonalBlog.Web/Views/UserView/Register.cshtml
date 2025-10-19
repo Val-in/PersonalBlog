@@ -11,23 +11,39 @@
 <button class="btn btn-primary" onclick="doRegister()">Зарегистрироваться</button>
 
 <script>
-async function doRegister(){
-    let dto = {
-        Login: document.getElementById("login").value,
-        Nickname: document.getElementById("nickname").value,
-        Email: document.getElementById("email").value,
-        Password: document.getElementById("password").value
-    };
-    let res = await fetch("/userapi/register", {
+async function doRegister() {
+    const login = document.getElementById("login").value.trim();
+    const nickname = document.getElementById("nickname").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    // --- Клиентская валидация ---
+    let errors = [];
+
+    if (login.length < 3) errors.push("Логин должен содержать минимум 3 символа");
+    if (nickname.length < 2) errors.push("Никнейм должен содержать минимум 2 символа");
+    if (!/^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/.test(email)) errors.push("Некорректный email");
+    if (password.length < 6) errors.push("Пароль должен быть не короче 6 символов");
+
+    if (errors.length > 0) {
+        alert("Исправьте ошибки:\n- " + errors.join("\n- "));
+        return;
+    }
+
+    // --- Отправка на сервер ---
+    const dto = { Login: login, Nickname: nickname, Email: email, Password: password };
+
+    const res = await fetch("/userapi/register", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dto)
     });
-    if(res.ok){
+
+    if (res.ok) {
         alert("Пользователь создан");
         window.location.href = "/AccountView/Login";
     } else {
-        let err = await res.json();
+        const err = await res.json();
         alert("Ошибка регистрации: " + JSON.stringify(err));
     }
 }

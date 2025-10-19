@@ -66,11 +66,11 @@ public class UserApiController(ILogger<UserApiController> logger, UserService se
     }
     
     [HttpPut("{id:guid}")]
-    public ActionResult<UserResponseDto> Update(Guid id, [FromBody] UserDto dto)
+    public ActionResult<UserResponseDto> Update(Guid id, [FromBody] UserUpdateDto dto)
     {
         try
         {
-            var updated = dto is { Login: not null, Nickname: not null } && service.Update(id, dto.Login, dto.Nickname);
+            var updated = service.Update(id, dto.Login, dto.Nickname, dto.Password, dto.RoleId);
             if (!updated) return NotFound(new { message = "Пользователь не найден" });
             return Ok(new { message = "Пользователь обновлён" });
         }

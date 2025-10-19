@@ -13,16 +13,40 @@
         return new URLSearchParams(window.location.search).get(param);
     }
 
+    async function loadTag() {
+        const tagId = getQueryParam("tagId");
+        if (!tagId) {
+            alert("Не найден ID тега");
+            return;
+        }
+
+        const res = await fetch("/tagapi/" + tagId);
+        if (res.ok) {
+            const tag = await res.json();
+            document.getElementById("tagName").value = tag.name;
+        } else {
+            alert("Ошибка при загрузке тега");
+        }
+    }
+
     async function saveTag() {
         const tagId = getQueryParam("tagId");
-        const dto = { name: document.getElementById("tagName").value };
+        const name = document.getElementById("tagName").value.trim();
+
+        if (!name) {
+            alert("Введите название тега");
+            return;
+        }
 
         await fetch("/tagapi/edit/" + tagId, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dto)
-    });
-    alert("Тег обновлен");
-    window.location.href = "/TagView/TagList";
-}
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name })
+        });
+
+        alert("Тег обновлён");
+        window.location.href = "/TagView/TagList";
+    }
+    
+    loadTag();
 </script>

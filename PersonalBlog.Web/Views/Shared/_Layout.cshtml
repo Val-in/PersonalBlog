@@ -1,3 +1,4 @@
+@using System.Security.Claims
 @{
     ViewData["Title"] = "PersonalBlog";
 }
@@ -32,7 +33,7 @@
                     }
                     <li class="nav-item"><a class="nav-link" href="/ArticleView/ArticleList">Статьи</a></li>
                     <li class="nav-item"><a class="nav-link" href="/TagView/TagList">Теги</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/UserView/UserDetails">Моя страница</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/UserView/UserDetails?userId=@User.FindFirstValue(ClaimTypes.NameIdentifier)">Моя страница</a></li>
                 </ul>
                 <button id="logoutBtn" class="btn btn-outline-light">Выход</button>
             </div>

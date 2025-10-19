@@ -32,6 +32,17 @@ async function createArticle() {
     const content = document.getElementById("contentInput").value;
     const selectedTags = Array.from(document.querySelectorAll(".tagCheckbox:checked")).map(o => o.value);
 
+    // --- Валидация ---
+    let errors = [];
+    if (title.length === 0) errors.push("Введите заголовок");
+    if (content.length === 0) errors.push("Введите содержимое статьи");
+    if (selectedTags.length === 0) errors.push("Выберите хотя бы один тег");
+
+    if (errors.length > 0) {
+        alert("Ошибка:\n- " + errors.join("\n- "));
+        return;
+    }
+
     await fetch("/articleapi/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

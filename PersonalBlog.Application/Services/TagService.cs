@@ -21,9 +21,15 @@ public class TagService(ITagRepository tagRepository)
         return tagRepository.Add(tag);
     }
 
-    public Tag? GetById(Guid id)
+    public TagEditDto? GetById(Guid id)
     {
-        return tagRepository.GetById(id);
+        var tag = tagRepository.GetById(id);
+        if (tag == null) return null;
+
+        return new TagEditDto
+        {
+            Name = tag.TagName
+        };
     }
 
     public IEnumerable<TagDto> GetAll()

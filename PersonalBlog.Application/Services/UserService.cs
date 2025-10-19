@@ -56,15 +56,33 @@ public class
 
     public IEnumerable<User> GetAll() => userRepository.GetAll();
 
-    public bool Update(Guid id, string dtoLogin, string dtoNickname)
+    public bool Update(Guid id, string login, string nickname, string? password = null, int? roleId = null)
     {
         var user = userRepository.GetById(id);
+        if (user == null) return false;
 
-        user.UserLogin = dtoLogin;
-        user.UserNickName = dtoNickname;
+        user.UserLogin = login;
+        user.UserNickName = nickname;
+        if (!string.IsNullOrEmpty(password))
+        {
+            user.Password = password;
+        }
+
+        if (roleId.HasValue)
+        {
+            user.UserRoles.Clear();
+            
+            user.UserRoles.Add(new UserRoles
+            {
+                UserId = user.Id,
+                RoleId = roleId.Value
+            });
+        }
+
         userRepository.Update(user);
         return true;
     }
+
 
     public bool Delete(Guid id)
     {
