@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalBlog.Web", "Persona
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalBlog.Api", "PersonalBlog.Api\PersonalBlog.Api.csproj", "{9CA12E03-F173-4508-B118-1F8C76E173AE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{1454492C-092F-4747-8A9D-719093A56AE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{9CA12E03-F173-4508-B118-1F8C76E173AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CA12E03-F173-4508-B118-1F8C76E173AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CA12E03-F173-4508-B118-1F8C76E173AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1454492C-092F-4747-8A9D-719093A56AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1454492C-092F-4747-8A9D-719093A56AE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1454492C-092F-4747-8A9D-719093A56AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1454492C-092F-4747-8A9D-719093A56AE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
