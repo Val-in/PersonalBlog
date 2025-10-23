@@ -56,7 +56,7 @@ public static class Program
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
-        app.UseDeveloperExceptionPage();
+        //app.UseDeveloperExceptionPage();
         
         if (app.Environment.IsDevelopment())
         {
@@ -64,6 +64,7 @@ public static class Program
             app.UseSwaggerUI();
         }
 
+        app.UseMiddleware<Middleware>();
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");

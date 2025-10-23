@@ -4,12 +4,20 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>Logging</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="NLog" Version="6.0.5" />
       <PackageReference Include="NLog.Config" Version="4.7.15" />
       <PackageReference Include="NLog.Schema" Version="6.0.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="C:\Users\Valeriia\.nuget\packages\nlog.config\4.7.15\contentFiles\any\any\NLog.config">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Link>NLog.config</Link>
+      </None>
     </ItemGroup>
 
 </Project>

@@ -38,6 +38,7 @@
     <ItemGroup>
       <ProjectReference Include="..\PersonalBlog.Application\PersonalBlog.Application.csproj" />
       <ProjectReference Include="..\PersonalBlog.Infrastructure\PersonalBlog.Infrastructure.csproj" />
+      <ProjectReference Include="..\LoggerNLog\LoggerNLog.csproj" />
     </ItemGroup>
 
 </Project>

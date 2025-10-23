@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalBlog.Web", "Persona
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalBlog.Api", "PersonalBlog.Api\PersonalBlog.Api.csproj", "{9CA12E03-F173-4508-B118-1F8C76E173AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{1454492C-092F-4747-8A9D-719093A56AE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerNLog", "LoggerNLog\LoggerNLog.csproj", "{1454492C-092F-4747-8A9D-719093A56AE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

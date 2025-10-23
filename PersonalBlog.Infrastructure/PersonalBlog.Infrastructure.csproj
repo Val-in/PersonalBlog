@@ -23,6 +23,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PersonalBlog.Core\PersonalBlog.Core.csproj" />
+        <ProjectReference Include="..\LoggerNLog\LoggerNLog.csproj" />
     </ItemGroup>
 
 </Project>

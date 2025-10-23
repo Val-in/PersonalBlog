@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
+using LoggerNLog;
 
 namespace PersonalBlog.Web.Controllers;
 
@@ -27,19 +28,29 @@ public class UserApiController(ILogger<UserApiController> logger, UserService se
     {
         try
         {
+            Logging.LogUserAction($"Попытка регистрации пользователя: {dto.Nickname}");
+
             var user = service.CreateUser(dto);
             var response = new UserResponseDto
             {
                 Message = "Пользователь зарегистрирован",
                 Nickname = user.UserNickName
             };
+
+            Logging.LogUserAction($"Пользователь зарегистрирован: {user.UserNickName}");
             return Ok(response);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Ошибка при регистрации пользователя");
+            Logging.LogError(ex, "Ошибка при регистрации пользователя");
             return BadRequest(new { message = ex.Message });
         }
+    }
+    
+    [HttpGet("test-error")]
+    public IActionResult TestError()
+    {
+        throw new Exception("Тестовая ошибка");
     }
     
     [HttpGet("{id:guid}")]
