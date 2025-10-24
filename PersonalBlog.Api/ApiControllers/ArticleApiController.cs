@@ -1,10 +1,9 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
 
-namespace PersonalBlog.Web.Controllers;
+namespace PersonalBlog.Api.ApiControllers;
 
 [ApiController]
 [Route("[controller]")]

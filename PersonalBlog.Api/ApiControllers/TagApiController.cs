@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
 
-namespace PersonalBlog.Web.Controllers;
+namespace PersonalBlog.Api.ApiControllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -46,7 +46,7 @@ public class TagApiController(TagService tagService) : Controller
         if (userIdClaim == null) return Unauthorized();
 
         var userId = Guid.Parse(userIdClaim.Value);
-        var success = tagService.UpdateTag(id, userId, dto.Name);
+        var success = dto.Name != null && tagService.UpdateTag(id, userId, dto.Name);
 
         return success ? Ok("Tag updated") : BadRequest("Cannot update tag");
     }

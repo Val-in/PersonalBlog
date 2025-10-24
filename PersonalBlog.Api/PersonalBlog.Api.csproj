@@ -11,10 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="obj\Debug\net9.0\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Remove="obj\**" />
     </ItemGroup>
 
@@ -32,6 +28,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\LoggerNLog\LoggerNLog.csproj" />
+      <ProjectReference Include="..\PersonalBlog.Application\PersonalBlog.Application.csproj" />
+      <ProjectReference Include="..\PersonalBlog.Infrastructure\PersonalBlog.Infrastructure.csproj" />
+      <ProjectReference Include="..\PersonalBlog.Web\PersonalBlog.Web.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,9 +1,9 @@
+using LoggerNLog;
 using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
-using LoggerNLog;
 
-namespace PersonalBlog.Web.Controllers;
+namespace PersonalBlog.Api.ApiControllers;
 
 /// <summary>
 /// [ApiController] Обозначает, что контроллер работает как API (JSON).
@@ -71,7 +71,7 @@ public class UserApiController(ILogger<UserApiController> logger, UserService se
                 Id = u.Id,
                 Login = u.UserLogin!,
                 Nickname = u.UserNickName!,
-                Roles = new List<string>()
+                Roles = new List<string?>()
             });
         return Ok(users);
     }

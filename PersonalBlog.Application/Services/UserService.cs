@@ -50,7 +50,7 @@ public class
             Id = user.Id,
             Login = user.UserLogin,
             Nickname = user.UserNickName,
-            Roles = user.UserRoles.Select(ur => ur.Role.RoleName).ToList()
+            Roles = user.UserRoles.Select(ur => ur.Role?.RoleName).ToList()
         };
     }
 
@@ -59,7 +59,6 @@ public class
     public bool Update(Guid id, string login, string nickname, string? password = null, int? roleId = null)
     {
         var user = userRepository.GetById(id);
-        if (user == null) return false;
 
         user.UserLogin = login;
         user.UserNickName = nickname;

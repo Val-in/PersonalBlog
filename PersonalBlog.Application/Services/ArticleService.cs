@@ -5,7 +5,7 @@ using PersonalBlog.Core.Models;
 
 namespace PersonalBlog.Application.Services;
 
-public class ArticleService(IArticleRepository articleRepository, IUserRepository userRepository)
+public class ArticleService(IArticleRepository articleRepository)
 {
     public bool AddArticle(ArticleCreateDto dto, ClaimsPrincipal user)
     {
@@ -46,7 +46,7 @@ public class ArticleService(IArticleRepository articleRepository, IUserRepositor
                 .Select(at => new TagDto
                 {
                     TagId = at.TagId,
-                    TagName = at.Tag.TagName
+                    TagName = at.Tag?.TagName
                 })
                 .ToList()
         };

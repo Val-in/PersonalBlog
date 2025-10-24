@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PersonalBlog.Application.DTO;
 using PersonalBlog.Application.Services;
 
-namespace PersonalBlog.Web.Controllers;
+namespace PersonalBlog.Api.ApiControllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -16,7 +16,7 @@ public class CommentApiController(AppCommentService commentService) : Controller
         if (userIdClaim == null) return Unauthorized();
 
         var userId = Guid.Parse(userIdClaim.Value);
-        var success = commentService.AddComment(userId, dto.ArticleId, dto.Text);
+        var success = dto.Text != null && commentService.AddComment(userId, dto.ArticleId, dto.Text);
         if (!success) return BadRequest("Cannot create comment");
 
         return Ok("Comment created");

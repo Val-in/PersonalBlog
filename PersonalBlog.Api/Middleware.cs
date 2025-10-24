@@ -1,23 +1,16 @@
 using LoggerNLog;
 
-namespace PersonalBlog.Web;
+namespace PersonalBlog.Api;
 
-public class Middleware
+public class Middleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public Middleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
     public async Task Invoke(HttpContext context)
     {
         try
         {
-            await _next(context); // передаем запрос дальше
+            await next(context); // передаем запрос дальше
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             Logging.LogError(ex, "Глобальная ошибка");
             
